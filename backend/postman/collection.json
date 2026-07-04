@@ -1,0 +1,18 @@
+{
+  "info": {
+    "name": "Diptish's Finance OS API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000" }
+  ],
+  "item": [
+    { "name": "Health", "request": { "method": "GET", "url": "{{baseUrl}}/health" } },
+    { "name": "Income List", "request": { "method": "GET", "url": "{{baseUrl}}/api/income" } },
+    { "name": "Create Income", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"source_name\":\"Salary\",\"amount\":92000,\"income_type\":\"Salary\"}" }, "url": "{{baseUrl}}/api/income" } },
+    { "name": "Expenses List", "request": { "method": "GET", "url": "{{baseUrl}}/api/expenses" } },
+    { "name": "Loans List", "request": { "method": "GET", "url": "{{baseUrl}}/api/loans" } },
+    { "name": "AI Advice", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"question\":\"Which loan should I close first?\"}" }, "url": "{{baseUrl}}/api/ai/advice" } },
+    { "name": "Reports Summary", "request": { "method": "GET", "url": "{{baseUrl}}/api/reports/summary" } }
+  ]
+}
