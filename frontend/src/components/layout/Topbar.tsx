@@ -1,9 +1,25 @@
-import { Bell, Menu, Search, UserRound } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Bell, LogOut, Menu, Search, UserRound } from 'lucide-react'
 import { useFinanceStore } from '../../store/useFinanceStore'
+import { logout } from '../../services/auth'
+import { useAuthStore } from '../../store/useAuthStore'
 
 export function Topbar() {
+  const navigate = useNavigate()
   const setSidebarOpen = useFinanceStore((state) => state.setSidebarOpen)
   const syncStatus = useFinanceStore((state) => state.syncStatus)
+  const user = useAuthStore((state) => state.user)
+  const clearAuth = useAuthStore((state) => state.clearAuth)
+
+  async function handleLogout() {
+    try {
+      await logout()
+    } finally {
+      clearAuth()
+      navigate('/login')
+    }
+  }
+
   return (
     <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0B0D10]/72 px-4 py-4 backdrop-blur-2xl lg:pl-80">
       <div className="mx-auto flex max-w-7xl items-center gap-3">
@@ -20,8 +36,15 @@ export function Topbar() {
         <button className="ml-auto rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Notifications">
           <Bell size={18} />
         </button>
-        <button className="rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Profile">
+        <Link to="/profile" className="hidden items-center gap-2 rounded-2xl border border-white/10 px-3 py-2 text-sm text-zinc-300 hover:bg-white/10 sm:flex" aria-label="Profile">
           <UserRound size={18} />
+          <span className="max-w-28 truncate">{user?.fullName ?? user?.name ?? user?.email ?? 'Profile'}</span>
+        </Link>
+        <Link to="/profile" className="rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10 sm:hidden" aria-label="Profile">
+          <UserRound size={18} />
+        </Link>
+        <button onClick={handleLogout} className="rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Logout">
+          <LogOut size={18} />
         </button>
       </div>
     </header>

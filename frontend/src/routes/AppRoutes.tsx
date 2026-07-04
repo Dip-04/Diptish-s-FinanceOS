@@ -12,15 +12,26 @@ import { ProfilePage } from '../pages/ProfilePage'
 import { ReportsPage } from '../pages/ReportsPage'
 import { SimplePage } from '../pages/SimplePage'
 import { VoiceEntryPage } from '../pages/VoiceEntryPage'
+import { useAuthStore } from '../store/useAuthStore'
+
+function ProtectedApp() {
+  const user = useAuthStore((state) => state.user)
+  return user ? <AppLayout /> : <Navigate to="/login" replace />
+}
+
+function PublicOnly({ children }: { children: React.ReactNode }) {
+  const user = useAuthStore((state) => state.user)
+  return user ? <Navigate to="/" replace /> : children
+}
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/login" element={<AuthPage mode="login" />} />
-      <Route path="/register" element={<AuthPage mode="register" />} />
-      <Route path="/forgot-password" element={<AuthPage mode="forgot" />} />
-      <Route path="/reset-password" element={<AuthPage mode="reset" />} />
-      <Route element={<AppLayout />}>
+      <Route path="/login" element={<PublicOnly><AuthPage mode="login" /></PublicOnly>} />
+      <Route path="/register" element={<PublicOnly><AuthPage mode="register" /></PublicOnly>} />
+      <Route path="/forgot-password" element={<PublicOnly><AuthPage mode="forgot" /></PublicOnly>} />
+      <Route path="/reset-password" element={<PublicOnly><AuthPage mode="reset" /></PublicOnly>} />
+      <Route element={<ProtectedApp />}>
         <Route index element={<DashboardPage />} />
         <Route path="income" element={<ModulePage id="income" />} />
         <Route path="expenses" element={<ModulePage id="expenses" />} />
