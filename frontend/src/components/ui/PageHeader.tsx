@@ -16,7 +16,7 @@ export function PageHeader({ title, subtitle, icon: Icon, action }: PageHeaderPr
           <Icon size={26} />
         </span>
         <div>
-          <h1 className="text-3xl font-semibold tracking-normal text-slate-50 md:text-4xl">{title}</h1>
+          <h1 className="text-2xl font-semibold tracking-normal text-white sm:text-3xl md:text-4xl">{title}</h1>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">{subtitle}</p>
         </div>
       </div>

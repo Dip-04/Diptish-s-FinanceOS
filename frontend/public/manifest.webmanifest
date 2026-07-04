@@ -2,8 +2,40 @@
   "name": "Diptish Gohane Finance OS",
   "short_name": "Finance OS",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "orientation": "portrait-primary",
   "background_color": "#0B0D10",
   "theme_color": "#C6FF3D",
-  "icons": []
+  "description": "A premium mobile-first financial operating system for planning, tracking, OCR, voice entries, reminders, and AI money coaching.",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Add expense",
+      "short_name": "Add",
+      "url": "/voice-entry",
+      "description": "Quickly add an expense by voice or text."
+    },
+    {
+      "name": "Monthly planner",
+      "short_name": "Planner",
+      "url": "/monthly-planner",
+      "description": "Open the month-wise cashflow planner."
+    }
+  ]
 }

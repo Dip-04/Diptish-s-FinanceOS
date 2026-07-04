@@ -7,7 +7,7 @@ export function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useFinanceStore()
   return (
     <>
-      <aside className={`fixed inset-y-0 left-0 z-40 w-72 border-r border-white/10 bg-[#0B0D10]/90 p-4 backdrop-blur-2xl transition-transform lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`fixed inset-y-0 left-0 z-40 w-72 overflow-y-auto border-r border-white/10 bg-[#0B0D10]/90 p-4 pb-8 backdrop-blur-2xl transition-transform lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="mb-8 flex items-center gap-3 px-2">
           <span className="rounded-2xl bg-gradient-to-br from-[#C6FF3D] via-[#F5C76B] to-[#FF6B6B] p-3 text-[#111111]"><Wallet size={24} /></span>
           <div>
@@ -15,7 +15,7 @@ export function Sidebar() {
             <p className="text-xs uppercase tracking-[0.22em] text-[#C6FF3D]">Finance OS</p>
           </div>
         </div>
-        <nav className="space-y-1">
+        <nav className="space-y-1 pb-safe">
           {navItems.map((item) => (
             <NavLink
               key={item.path}

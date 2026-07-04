@@ -14,13 +14,21 @@ values
 insert into public.loans (loan_name, lender_name, loan_type, total_loan_amount, interest_rate, emi_amount, outstanding_amount, status, notes)
 values
   ('Slice', 'Slice', 'BNPL', 102369, 22, 18000, 45869, 'Active', 'July payment 29000, August payment 27500, EMI from September 18000'),
-  ('Bike Loan', 'HDFC', 'Bike Loan', 90000, 12.5, 5000, 45000, 'Active');
+  ('Bike Loan', 'HDFC', 'Bike Loan', 90000, 12.5, 5000, 45000, 'Active', 'Bike EMI seed loan');
 
 insert into public.monthly_plans (month, year, planned_income, actual_income)
-values (7, 2026, 92000, 92000), (8, 2026, 92000, 92000), (9, 2026, 52000, 52000);
+values
+  (7, 2026, 92000, 92000),
+  (8, 2026, 92000, 92000),
+  (9, 2026, 52000, 52000);
 
 insert into public.currencies (code, symbol, name)
-values ('INR', '₹', 'Indian Rupee'), ('USD', '$', 'US Dollar'), ('EUR', '€', 'Euro'), ('GBP', '£', 'British Pound'), ('AED', 'د.إ', 'UAE Dirham')
+values
+  ('INR', U&'\20B9', 'Indian Rupee'),
+  ('USD', '$', 'US Dollar'),
+  ('EUR', U&'\20AC', 'Euro'),
+  ('GBP', U&'\00A3', 'British Pound'),
+  ('AED', U&'\062F.\0625', 'UAE Dirham')
 on conflict do nothing;
 
 insert into public.savings_goals (goal_name, target_amount, current_saved_amount, deadline, priority, monthly_saving_required, status)

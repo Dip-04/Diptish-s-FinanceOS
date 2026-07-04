@@ -10,6 +10,7 @@ import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
 import { modules } from '../constants/finance'
 import { createRecord, listRecords } from '../services/api'
+import { enqueueOfflineAction } from '../services/offlineSync'
 import type { FinanceRecord } from '../types/finance'
 
 export function ModulePage({ id }: { id: keyof typeof modules }) {
@@ -35,7 +36,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
     try {
       await createRecord(config.endpoint, payload)
     } catch {
-      // Local optimistic data keeps the app useful when Supabase is not configured.
+      enqueueOfflineAction({ resource: config.endpoint, operation: 'create', payload })
     }
   }
 

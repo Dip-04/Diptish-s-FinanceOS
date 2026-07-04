@@ -3,6 +3,7 @@ import { useFinanceStore } from '../../store/useFinanceStore'
 
 export function Topbar() {
   const setSidebarOpen = useFinanceStore((state) => state.setSidebarOpen)
+  const syncStatus = useFinanceStore((state) => state.syncStatus)
   return (
     <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0B0D10]/72 px-4 py-4 backdrop-blur-2xl lg:pl-80">
       <div className="mx-auto flex max-w-7xl items-center gap-3">
@@ -13,6 +14,9 @@ export function Topbar() {
           <Search size={18} />
           <span className="text-sm">Search transactions, loans, goals...</span>
         </div>
+        <span className={`rounded-full border px-3 py-2 text-xs font-semibold md:hidden ${syncStatus === 'online' ? 'border-[#4ADE80]/25 bg-[#4ADE80]/10 text-[#4ADE80]' : 'border-[#F5C76B]/25 bg-[#F5C76B]/10 text-[#F5C76B]'}`}>
+          {syncStatus === 'online' ? 'Online' : 'Offline'}
+        </span>
         <button className="ml-auto rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Notifications">
           <Bell size={18} />
         </button>

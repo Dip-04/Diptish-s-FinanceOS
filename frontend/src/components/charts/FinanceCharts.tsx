@@ -64,7 +64,7 @@ function AreaSeries({ dataKey, color }: { dataKey: string; color: string }) {
 
 function ChartShell({ title, className = '', children }: PropsWithChildren<{ title: string; className?: string }>) {
   return (
-    <GlassCard className={`p-5 ${className}`}>
+    <GlassCard className={`min-w-0 p-4 sm:p-5 ${className}`}>
       <h3 className="mb-4 text-lg font-semibold text-slate-50">{title}</h3>
       {children}
     </GlassCard>
