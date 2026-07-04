@@ -29,7 +29,7 @@ export function AIAdvisorPage() {
           <div className="mt-6 rounded-3xl border border-[#2A9D8F]/20 bg-[#2A9D8F]/10 p-5 text-[#111827]">{answer}</div>
         </GlassCard>
         <GlassCard className="p-5">
-          <h2 className="text-lg font-semibold text-slate-50">Example questions</h2>
+          <h2 className="text-lg font-semibold text-[#111827]">Example questions</h2>
           <div className="mt-4 space-y-2">
             {examples.map((item) => <button key={item} onClick={() => setQuestion(item)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-left text-sm text-gray-600 hover:bg-white">{item}</button>)}
           </div>

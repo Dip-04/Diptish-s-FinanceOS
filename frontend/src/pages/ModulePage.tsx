@@ -50,12 +50,12 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
       />
       <div className="mb-5 grid gap-4 md:grid-cols-2">
         <GlassCard className="p-5">
-          <p className="text-sm text-slate-400">Total tracked</p>
-          <strong className="mt-2 block text-3xl font-semibold text-slate-50">₹{metrics.total.toLocaleString('en-IN')}</strong>
+          <p className="text-sm text-gray-500">Total tracked</p>
+          <strong className="mt-2 block text-3xl font-semibold text-[#111827]">₹{metrics.total.toLocaleString('en-IN')}</strong>
         </GlassCard>
         <GlassCard className="p-5">
-          <p className="text-sm text-slate-400">Records</p>
-          <strong className="mt-2 block text-3xl font-semibold text-slate-50">{metrics.count}</strong>
+          <p className="text-sm text-gray-500">Records</p>
+          <strong className="mt-2 block text-3xl font-semibold text-[#111827]">{metrics.count}</strong>
         </GlassCard>
       </div>
       <GlassCard className="p-4">

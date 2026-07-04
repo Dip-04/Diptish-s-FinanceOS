@@ -7,7 +7,11 @@ export function SimplePage({ title, subtitle, icon: Icon, items }: { title: stri
     <div>
       <PageHeader title={title} subtitle={subtitle} icon={Icon} />
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {items.map((item) => <GlassCard key={item} className="p-5 text-slate-200">{item}</GlassCard>)}
+        {items.map((item) => (
+          <GlassCard key={item} className="flex min-h-24 items-center p-5 text-base font-semibold text-[#111827]">
+            {item}
+          </GlassCard>
+        ))}
       </div>
     </div>
   )

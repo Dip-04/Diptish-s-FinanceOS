@@ -63,7 +63,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
 
   return (
     <main className="grid min-h-screen gap-6 px-4 py-6 lg:grid-cols-[1.1fr_0.9fr] lg:p-8">
-      <section className="aurora-card hidden overflow-hidden rounded-[2rem] border border-white/10 p-8 shadow-2xl shadow-black/40 lg:flex lg:flex-col lg:justify-between">
+      <section className="aurora-card hidden overflow-hidden rounded-[2rem] border border-gray-100 p-8 lg:flex lg:flex-col lg:justify-between">
         <div>
           <div className="flex items-center gap-3">
             <span className="rounded-3xl bg-[#111827] p-4 text-white"><Wallet size={30} /></span>
@@ -100,7 +100,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
           {mode !== 'forgot' && (
             <div className="flex items-center rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 focus-within:border-[#2A9D8F]">
               <input {...formRegister('password')} type={showPassword ? 'text' : 'password'} className="min-w-0 flex-1 bg-transparent py-3 text-sm outline-none" placeholder={mode === 'reset' ? 'New password' : 'Password'} />
-              <button type="button" onClick={() => setShowPassword((value) => !value)} className="text-zinc-400" aria-label="Toggle password visibility">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button>
+              <button type="button" onClick={() => setShowPassword((value) => !value)} className="text-gray-500" aria-label="Toggle password visibility">{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}</button>
             </div>
           )}
           {errors.password && <p className="text-xs text-[#FB3B5F]">{errors.password.message}</p>}
@@ -115,14 +115,11 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
             {cta}
           </button>
         </form>
-        {message && <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.05] p-3 text-sm text-zinc-300">{message}</div>}
-        <div className="mt-5 flex items-center justify-between text-sm text-zinc-400">
+        {message && <div className="mt-4 rounded-2xl border border-gray-200 bg-[#F9FAFB] p-3 text-sm text-gray-700">{message}</div>}
+        <div className="mt-5 flex items-center justify-between text-sm text-gray-600">
           <Link className="font-semibold text-[#2A9D8F]" to="/forgot-password">Forgot password?</Link>
           <Link className="font-semibold text-[#F5C76B]" to={isRegister ? '/login' : '/register'}>{isRegister ? 'Login' : 'Register'}</Link>
         </div>
-        <p className="mt-5 text-xs leading-5 text-zinc-500">
-          Demo credentials are documented in the setup guide only. Passwords are never hardcoded into the frontend.
-        </p>
       </GlassCard>
       </section>
     </main>

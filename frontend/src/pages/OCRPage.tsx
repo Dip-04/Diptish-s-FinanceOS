@@ -41,7 +41,7 @@ export function OCRPage() {
           <div className="rounded-3xl border border-dashed border-[#2A9D8F]/30 bg-[#2A9D8F]/5 p-8 text-center">
             <FileScan className="mx-auto text-[#2A9D8F]" size={34} />
             <h3 className="mt-4 text-xl font-semibold text-[#111827]">Image OCR Scanner</h3>
-            <p className="mt-2 text-sm leading-6 text-zinc-400">Upload a bill or screenshot/image statement. OCR runs locally in your browser.</p>
+            <p className="mt-2 text-sm leading-6 text-gray-500">Upload a bill or screenshot/image statement. OCR runs locally in your browser.</p>
             <input type="file" accept="image/*,application/pdf" onChange={(event) => event.target.files?.[0] && void runBrowserOcr(event.target.files[0])} className="mt-5 w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600" />
             <div className="mt-4 flex items-center justify-center gap-2 text-sm text-[#E76F51]">
               {busy && <Loader2 className="animate-spin" size={16} />}

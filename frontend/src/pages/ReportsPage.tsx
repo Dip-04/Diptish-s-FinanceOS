@@ -9,7 +9,7 @@ export function ReportsPage() {
     <div>
       <PageHeader title="Reports & Analytics" subtitle="Daily, weekly, monthly, quarterly, yearly, tax, cashflow, and net worth reporting." icon={FileText} />
       <div className="mb-5 grid gap-3 md:grid-cols-3">
-        {reports.map((report) => <GlassCard key={report} className="p-4 text-sm font-medium text-slate-200">{report}</GlassCard>)}
+        {reports.map((report) => <GlassCard key={report} className="p-4 text-sm font-semibold text-[#111827]">{report}</GlassCard>)}
       </div>
       <ChartGrid />
     </div>

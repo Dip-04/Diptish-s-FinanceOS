@@ -95,7 +95,7 @@ export function ProfilePage() {
             <button className="grid h-20 w-20 place-items-center rounded-3xl bg-[#111827] text-white" aria-label="Upload profile photo"><Camera /></button>
             <div>
               <h2 className="text-2xl font-semibold text-[#111827]">{profileForm.watch('fullName')}</h2>
-              <p className="text-sm text-zinc-400">{profileForm.watch('email')}</p>
+              <p className="text-sm text-gray-500">{profileForm.watch('email')}</p>
             </div>
           </div>
           <form onSubmit={profileForm.handleSubmit(saveProfile)} className="grid gap-3 md:grid-cols-2">
@@ -115,7 +115,7 @@ export function ProfilePage() {
               Save profile
             </button>
           </form>
-          {profileMessage && <p className="mt-4 rounded-2xl bg-white/[0.05] p-3 text-sm text-zinc-300">{profileMessage}</p>}
+          {profileMessage && <p className="mt-4 rounded-2xl bg-[#F9FAFB] p-3 text-sm text-gray-700">{profileMessage}</p>}
         </GlassCard>
 
         <GlassCard className="p-5">
@@ -123,7 +123,7 @@ export function ProfilePage() {
             <span className="rounded-2xl bg-[#F1F5F9] p-3 text-[#E76F51]"><KeyRound /></span>
             <div>
               <h2 className="text-xl font-semibold text-[#111827]">Change password</h2>
-              <p className="text-sm text-zinc-400">Update your account password securely.</p>
+              <p className="text-sm text-gray-500">Update your account password securely.</p>
             </div>
           </div>
           <form onSubmit={passwordForm.handleSubmit(savePassword)} className="space-y-3">
@@ -136,7 +136,7 @@ export function ProfilePage() {
               Change password
             </button>
           </form>
-          {passwordMessage && <p className="mt-4 rounded-2xl bg-white/[0.05] p-3 text-sm text-zinc-300">{passwordMessage}</p>}
+          {passwordMessage && <p className="mt-4 rounded-2xl bg-[#F9FAFB] p-3 text-sm text-gray-700">{passwordMessage}</p>}
         </GlassCard>
       </div>
     </div>

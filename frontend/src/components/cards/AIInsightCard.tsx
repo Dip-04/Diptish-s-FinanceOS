@@ -8,10 +8,10 @@ export function AIInsightCard() {
         <span className="rounded-2xl bg-[#F1F5F9] p-3 text-[#E76F51]"><Bot size={22} /></span>
         <div>
           <p className="text-sm uppercase tracking-[0.18em] text-[#E76F51]">AI financial brain</p>
-          <h3 className="text-xl font-semibold text-slate-50">July has high debt pressure.</h3>
+          <h3 className="text-xl font-semibold text-[#111827]">July has high debt pressure.</h3>
         </div>
       </div>
-      <p className="mt-4 text-sm leading-6 text-slate-300">
+      <p className="mt-4 text-sm leading-6 text-gray-600">
         Avoid new purchases until September. Paying Slice before optional spending can free up cashflow and reduce interest drag.
       </p>
       <div className="mt-5 flex items-center gap-2 text-sm font-medium text-[#F5C76B]">

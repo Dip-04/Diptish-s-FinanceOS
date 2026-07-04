@@ -15,20 +15,20 @@ export function MonthlyPlannerPage() {
           return (
             <GlassCard key={plan.month} className="p-5">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-slate-50">{plan.month}</h2>
+                <h2 className="text-xl font-semibold text-[#111827]">{plan.month}</h2>
                 {remaining < 0 ? <AlertTriangle className="text-rose-300" /> : <CheckCircle2 className="text-emerald-300" />}
               </div>
-              <p className="mt-2 text-sm text-slate-400">Income {currency(plan.income)}</p>
+              <p className="mt-2 text-sm text-gray-500">Income {currency(plan.income)}</p>
               <div className="mt-5 space-y-3">
                 {plan.items.map(([name, amount]) => (
-                  <div key={name} className="flex items-center justify-between rounded-2xl bg-white/[0.045] px-4 py-3 text-sm">
-                    <span className="text-slate-300">{name}</span>
-                    <strong className="text-slate-50">{currency(amount)}</strong>
+                  <div key={name} className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">
+                    <span className="text-gray-600">{name}</span>
+                    <strong className="text-[#111827]">{currency(amount)}</strong>
                   </div>
                 ))}
               </div>
-              <div className="mt-5 rounded-2xl border border-white/10 bg-white/[0.06] p-4">
-                <p className="text-sm text-slate-400">Remaining balance</p>
+              <div className="mt-5 rounded-2xl border border-gray-100 bg-[#F9FAFB] p-4">
+                <p className="text-sm text-gray-500">Remaining balance</p>
                 <strong className={`text-2xl ${remaining < 0 ? 'text-rose-300' : 'text-emerald-300'}`}>{currency(remaining)}</strong>
               </div>
             </GlassCard>
