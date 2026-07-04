@@ -8,17 +8,23 @@ import {
   CalendarDays,
   ChartNoAxesCombined,
   CreditCard,
+  FileScan,
   FileText,
   Gauge,
   HeartPulse,
   Landmark,
+  MessageCircle,
+  Mic,
+  Moon,
   PiggyBank,
   ReceiptText,
   Settings,
   ShieldCheck,
   Sparkles,
   Target,
+  Users,
   WalletCards,
+  Wifi,
 } from 'lucide-react'
 import type { FinanceRecord, ModuleConfig, NavItem } from '../types/finance'
 import { currency } from '../utils/format'
@@ -37,8 +43,17 @@ export const navItems: NavItem[] = [
   { label: 'Insurance', path: '/insurance', icon: ShieldCheck },
   { label: 'Reports', path: '/reports', icon: FileText },
   { label: 'AI Advisor', path: '/ai-advisor', icon: Bot },
+  { label: 'AI Tax Planner', path: '/ai-tax-planner', icon: Landmark },
+  { label: 'AI Investments', path: '/ai-investments', icon: ChartNoAxesCombined },
+  { label: 'Monthly Coach', path: '/ai-coach', icon: Sparkles },
   { label: 'Documents', path: '/documents', icon: BriefcaseBusiness },
-  { label: 'Notifications', path: '/notifications', icon: Bell },
+  { label: 'OCR Scanner', path: '/ocr', icon: FileScan },
+  { label: 'UPI SMS', path: '/upi-sms', icon: MessageCircle },
+  { label: 'WhatsApp', path: '/whatsapp-reminders', icon: Bell },
+  { label: 'Voice Entry', path: '/voice-entry', icon: Mic },
+  { label: 'Family Budget', path: '/family-budget', icon: Users },
+  { label: 'Multi-Currency', path: '/multi-currency', icon: Wifi },
+  { label: 'Offline Sync', path: '/offline-sync', icon: Moon },
   { label: 'Settings', path: '/settings', icon: Settings },
 ]
 
@@ -51,7 +66,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Track salary, freelance, business, bonuses, interest, dividends, gifts, and refunds.',
     endpoint: '/income',
     icon: Banknote,
-    accent: 'from-cyan-400 to-violet-500',
+    accent: 'from-[#C6FF3D] to-[#F5C76B]',
     fields: [
       { name: 'source_name', label: 'Source name' },
       { name: 'amount', label: 'Amount', type: 'number' },
@@ -72,7 +87,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Control every rupee across fixed, variable, recurring, and one-time expenses.',
     endpoint: '/expenses',
     icon: ReceiptText,
-    accent: 'from-rose-500 to-amber-400',
+    accent: 'from-[#FF6B6B] to-[#F5C76B]',
     fields: [
       { name: 'expense_name', label: 'Expense name' },
       { name: 'category', label: 'Category', type: 'select', options: ['Rent', 'EMI', 'Loan', 'Food', 'Petrol', 'Shopping', 'Travel', 'Gym', 'Medical', 'Family', 'Bills', 'Insurance', 'Education', 'Entertainment', 'Savings', 'Other'] },
@@ -93,7 +108,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Analyze loans, prepayments, interest pressure, and the best debt to close first.',
     endpoint: '/loans',
     icon: Landmark,
-    accent: 'from-violet-500 to-rose-500',
+    accent: 'from-[#B76CFF] to-[#FB3B5F]',
     fields: [
       { name: 'loan_name', label: 'Loan name' },
       { name: 'lender_name', label: 'Lender' },
@@ -106,16 +121,16 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     ],
     columns: [{ key: 'loan_name', header: 'Loan' }, { key: 'lender_name', header: 'Lender' }, { key: 'outstanding_amount', header: 'Outstanding', render: (row) => currency(Number(row.outstanding_amount ?? 0)) }, { key: 'interest_rate', header: 'Rate' }],
     seed: [
-      { id: 'loan-1', loan_name: 'Slice', lender_name: 'Slice', loan_type: 'BNPL', total_loan_amount: 56500, interest_rate: 22, emi_amount: 18000, outstanding_amount: 52000, status: 'Active' },
+      { id: 'loan-1', loan_name: 'Slice', lender_name: 'Slice', loan_type: 'BNPL', total_loan_amount: 102369, interest_rate: 22, emi_amount: 18000, outstanding_amount: 45869, status: 'Active' },
       { id: 'loan-2', loan_name: 'Bike Loan', lender_name: 'HDFC', loan_type: 'Bike Loan', total_loan_amount: 90000, interest_rate: 12.5, emi_amount: 5000, outstanding_amount: 45000, status: 'Active' },
     ],
   },
-  emis: makeModule('EMI Tracker', '/emis', WalletCards, 'from-emerald-400 to-cyan-400', 'Track upcoming, paid, missed, penalty, and completion status for every EMI.', 'emi_name'),
-  'credit-cards': makeModule('Credit Card Manager', '/credit-cards', CreditCard, 'from-cyan-400 to-violet-500', 'Monitor limits, billing dates, due amounts, minimum due, interest, and rewards.', 'card_name'),
-  goals: makeModule('Savings Goals', '/goals', Target, 'from-emerald-400 to-cyan-400', 'Plan iPhone, bike, trip, emergency fund, house, and investment goals.', 'goal_name'),
-  wishlist: makeModule('Wishlist Planner', '/wishlist', Sparkles, 'from-violet-500 to-rose-500', 'Calculate affordable dates, monthly saving required, and purchase priority.', 'item_name'),
-  investments: makeModule('Investment Tracker', '/investments', ChartNoAxesCombined, 'from-emerald-400 to-cyan-400', 'Track FD, RD, mutual funds, stocks, gold, crypto, PPF, NPS, EPF, and real estate.', 'investment_name'),
-  insurance: makeModule('Insurance Tracker', '/insurance', ShieldCheck, 'from-amber-400 to-rose-500', 'Manage health, life, vehicle, travel policies, premiums, coverage, and renewals.', 'policy_name'),
+  emis: makeModule('EMI Tracker', '/emis', WalletCards, 'from-[#4ADE80] to-[#C6FF3D]', 'Track upcoming, paid, missed, penalty, and completion status for every EMI.', 'emi_name'),
+  'credit-cards': makeModule('Credit Card Manager', '/credit-cards', CreditCard, 'from-[#C6FF3D] to-[#B76CFF]', 'Monitor limits, billing dates, due amounts, minimum due, interest, and rewards.', 'card_name'),
+  goals: makeModule('Savings Goals', '/goals', Target, 'from-[#4ADE80] to-[#F5C76B]', 'Plan iPhone, bike, trip, emergency fund, house, and investment goals.', 'goal_name'),
+  wishlist: makeModule('Wishlist Planner', '/wishlist', Sparkles, 'from-[#B76CFF] to-[#FF6B6B]', 'Calculate affordable dates, monthly saving required, and purchase priority.', 'item_name'),
+  investments: makeModule('Investment Tracker', '/investments', ChartNoAxesCombined, 'from-[#C6FF3D] to-[#4ADE80]', 'Track FD, RD, mutual funds, stocks, gold, crypto, PPF, NPS, EPF, and real estate.', 'investment_name'),
+  insurance: makeModule('Insurance Tracker', '/insurance', ShieldCheck, 'from-[#F5C76B] to-[#FF6B6B]', 'Manage health, life, vehicle, travel policies, premiums, coverage, and renewals.', 'policy_name'),
 }
 
 function makeModule(title: string, endpoint: string, icon: ModuleConfig<FinanceRecord>['icon'], accent: string, subtitle: string, nameKey: string): ModuleConfig<FinanceRecord> {
@@ -138,22 +153,22 @@ function makeModule(title: string, endpoint: string, icon: ModuleConfig<FinanceR
 }
 
 export const dashboardStats = [
-  { label: 'Total Balance', value: 12400, icon: BadgeIndianRupee, accent: 'from-cyan-400 to-violet-500' },
-  { label: 'Monthly Income', value: 92000, icon: Banknote, accent: 'from-emerald-400 to-cyan-400' },
-  { label: 'Monthly Expenses', value: 90000, icon: ReceiptText, accent: 'from-amber-400 to-rose-500' },
-  { label: 'Savings', value: 2000, icon: PiggyBank, accent: 'from-emerald-400 to-cyan-400' },
-  { label: 'Total Debt', value: 97000, icon: Landmark, accent: 'from-violet-500 to-rose-500' },
-  { label: 'Net Worth', value: 218000, icon: Building2, accent: 'from-cyan-400 to-violet-500' },
-  { label: 'Upcoming EMI', value: 18000, icon: WalletCards, accent: 'from-amber-400 to-rose-500' },
-  { label: 'Health Score', value: 71, icon: HeartPulse, accent: 'from-emerald-400 to-cyan-400', suffix: '/100' },
+  { label: 'Total Balance', value: 12400, icon: BadgeIndianRupee, accent: 'from-[#C6FF3D] to-[#F5C76B]' },
+  { label: 'Monthly Income', value: 92000, icon: Banknote, accent: 'from-[#4ADE80] to-[#C6FF3D]' },
+  { label: 'Monthly Expenses', value: 90000, icon: ReceiptText, accent: 'from-[#FF6B6B] to-[#F5C76B]' },
+  { label: 'Savings', value: 2000, icon: PiggyBank, accent: 'from-[#4ADE80] to-[#F5C76B]' },
+  { label: 'Total Debt', value: 45869, icon: Landmark, accent: 'from-[#B76CFF] to-[#FB3B5F]' },
+  { label: 'Net Worth', value: 218000, icon: Building2, accent: 'from-[#C6FF3D] to-[#B76CFF]' },
+  { label: 'Upcoming EMI', value: 18000, icon: WalletCards, accent: 'from-[#F5C76B] to-[#FF6B6B]' },
+  { label: 'Health Score', value: 74, icon: HeartPulse, accent: 'from-[#4ADE80] to-[#C6FF3D]', suffix: '/100' },
 ]
 
 export const cashflow = [
   { name: 'May', income: 76000, expenses: 62000, savings: 14000, debt: 130000, netWorth: 178000 },
   { name: 'Jun', income: 88000, expenses: 70500, savings: 17500, debt: 114000, netWorth: 198000 },
-  { name: 'Jul', income: 92000, expenses: 90000, savings: 2000, debt: 97000, netWorth: 218000 },
-  { name: 'Aug', income: 92000, expenses: 92000, savings: 0, debt: 69500, netWorth: 227000 },
-  { name: 'Sep', income: 52000, expenses: 42500, savings: 9500, debt: 51500, netWorth: 241000 },
+  { name: 'Jul', income: 92000, expenses: 94000, savings: 2000, debt: 73369, netWorth: 218000 },
+  { name: 'Aug', income: 92000, expenses: 92000, savings: 0, debt: 45869, netWorth: 227000 },
+  { name: 'Sep', income: 52000, expenses: 44500, savings: 7500, debt: 27869, netWorth: 241000 },
 ]
 
 export const categoryBreakdown = [

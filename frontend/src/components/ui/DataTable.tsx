@@ -8,7 +8,7 @@ type DataTableProps<T extends Record<string, unknown>> = {
 
 export function DataTable<T extends Record<string, unknown>>({ rows, columns }: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto">
+    <div className="hidden overflow-x-auto md:block">
       <table className="w-full min-w-[720px] border-separate border-spacing-y-2 text-left text-sm">
         <thead className="text-xs uppercase tracking-[0.16em] text-slate-500">
           <tr>{columns.map((column) => <th key={String(column.key)} className="px-4 py-3 font-semibold">{column.header}</th>)}</tr>

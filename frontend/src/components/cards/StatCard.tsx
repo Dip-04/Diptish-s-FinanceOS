@@ -20,7 +20,7 @@ export function StatCard({ label, value, icon: Icon, accent, suffix }: StatCardP
             {suffix ? `${value}${suffix}` : currency(value)}
           </strong>
         </div>
-        <span className={`rounded-2xl bg-gradient-to-br ${accent} p-3 text-slate-950 shadow-lg shadow-cyan-500/10`}>
+        <span className={`rounded-2xl bg-gradient-to-br ${accent} p-3 text-[#111111] shadow-lg shadow-lime-500/10`}>
           <Icon size={20} />
         </span>
       </div>

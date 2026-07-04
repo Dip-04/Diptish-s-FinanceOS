@@ -251,3 +251,134 @@ create policy "Users can manage own investments" on public.investments for all u
 create policy "Users can manage own insurance" on public.insurance_policies for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users can manage own documents" on public.documents for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users can manage own notifications" on public.notifications for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table if not exists public.ocr_transactions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  source_file text,
+  extracted_transactions jsonb default '[]'::jsonb,
+  status text default 'review',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.reminders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  reminder_type text,
+  title text not null,
+  due_at timestamptz,
+  channel text default 'in_app',
+  status text default 'scheduled',
+  payload jsonb default '{}'::jsonb,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.family_groups (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  group_name text not null,
+  monthly_budget numeric(14,2) default 0,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.family_members (
+  id uuid primary key default gen_random_uuid(),
+  family_group_id uuid references public.family_groups(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
+  member_name text not null,
+  email text,
+  role text default 'viewer',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.shared_budgets (
+  id uuid primary key default gen_random_uuid(),
+  family_group_id uuid references public.family_groups(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
+  budget_name text not null,
+  amount numeric(14,2) default 0,
+  spent_amount numeric(14,2) default 0,
+  month integer,
+  year integer,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.voice_commands (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  command text not null,
+  parsed jsonb default '{}'::jsonb,
+  status text default 'review',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.notification_preferences (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  rent_due boolean default true,
+  emi_due boolean default true,
+  credit_card_due boolean default true,
+  insurance_renewal boolean default true,
+  whatsapp_enabled boolean default false,
+  push_enabled boolean default true,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create table if not exists public.currencies (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  code text not null,
+  symbol text,
+  name text,
+  preferred boolean default false,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  unique(user_id, code)
+);
+
+create table if not exists public.sync_queue (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users(id) on delete cascade,
+  operation text not null,
+  resource text not null,
+  payload jsonb default '{}'::jsonb,
+  client_updated_at timestamptz,
+  synced_at timestamptz,
+  status text default 'pending',
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+create index if not exists idx_ocr_user_status on public.ocr_transactions(user_id, status);
+create index if not exists idx_reminders_user_due on public.reminders(user_id, due_at);
+create index if not exists idx_family_groups_user on public.family_groups(user_id);
+create index if not exists idx_sync_queue_user_status on public.sync_queue(user_id, status);
+
+do $$
+declare
+  table_name text;
+begin
+  foreach table_name in array array['ocr_transactions','reminders','family_groups','family_members','shared_budgets','voice_commands','notification_preferences','currencies','sync_queue']
+  loop
+    execute format('alter table public.%I enable row level security', table_name);
+    execute format('drop trigger if exists set_%I_updated_at on public.%I', table_name, table_name);
+    execute format('create trigger set_%I_updated_at before update on public.%I for each row execute function public.set_updated_at()', table_name, table_name);
+  end loop;
+end $$;
+
+create policy "Users can manage own ocr transactions" on public.ocr_transactions for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own reminders" on public.reminders for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own family groups" on public.family_groups for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own family members" on public.family_members for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own shared budgets" on public.shared_budgets for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own voice commands" on public.voice_commands for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own notification preferences" on public.notification_preferences for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own currencies" on public.currencies for all using (auth.uid() = user_id or user_id is null) with check (auth.uid() = user_id or user_id is null);
+create policy "Users can manage own sync queue" on public.sync_queue for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

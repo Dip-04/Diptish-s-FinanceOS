@@ -6,6 +6,7 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { FormControl } from '../components/ui/FormControls'
 import { GlassCard } from '../components/ui/GlassCard'
 import { Modal } from '../components/ui/Modal'
+import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
 import { modules } from '../constants/finance'
 import { createRecord, listRecords } from '../services/api'
@@ -57,7 +58,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         </GlassCard>
       </div>
       <GlassCard className="p-4">
-        {rows.length ? <DataTable rows={rows} columns={config.columns} /> : <EmptyState />}
+        {rows.length ? <><MobileCardList rows={rows} columns={config.columns} /><DataTable rows={rows} columns={config.columns} /></> : <EmptyState />}
       </GlassCard>
       <Modal title={`Add ${config.title}`} open={open} onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 md:grid-cols-2">

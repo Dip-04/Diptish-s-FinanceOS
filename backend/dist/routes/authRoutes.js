@@ -23,4 +23,16 @@ authRoutes.post('/login', asyncHandler(async (req, res) => {
     return res.json(data);
 }));
 authRoutes.post('/logout', (_req, res) => res.json({ ok: true }));
+authRoutes.post('/forgot-password', asyncHandler(async (req, res) => {
+    const { email } = z.object({ email: z.string().email() }).parse(req.body);
+    if (!supabase)
+        return res.json({ ok: true, mode: 'local', email });
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    if (error)
+        throw error;
+    return res.json({ ok: true });
+}));
+authRoutes.post('/reset-password', asyncHandler(async (_req, res) => res.json({ ok: true, message: 'Use Supabase client session to update password in production.' })));
 authRoutes.get('/profile', (_req, res) => res.json({ id: 'local-user', name: 'Diptish', email: 'diptish@example.com' }));
+authRoutes.put('/profile', asyncHandler(async (req, res) => res.json({ id: 'local-user', ...req.body, updated_at: new Date().toISOString() })));
+authRoutes.post('/change-password', asyncHandler(async (_req, res) => res.json({ ok: true })));

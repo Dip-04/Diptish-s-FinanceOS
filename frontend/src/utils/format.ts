@@ -1,5 +1,15 @@
-export const currency = (value: number) =>
-  new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(value)
+export type CurrencyCode = 'INR' | 'USD' | 'EUR' | 'GBP' | 'AED'
+
+const locales: Record<CurrencyCode, string> = {
+  INR: 'en-IN',
+  USD: 'en-US',
+  EUR: 'de-DE',
+  GBP: 'en-GB',
+  AED: 'en-AE',
+}
+
+export const currency = (value: number, code: CurrencyCode = 'INR') =>
+  new Intl.NumberFormat(locales[code], { style: 'currency', currency: code, maximumFractionDigits: 0 }).format(value)
 
 export const percent = (value: number) => `${Math.round(value)}%`
 

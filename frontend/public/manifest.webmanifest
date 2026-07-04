@@ -1,0 +1,9 @@
+{
+  "name": "Diptish Gohane Finance OS",
+  "short_name": "Finance OS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0D10",
+  "theme_color": "#C6FF3D",
+  "icons": []
+}

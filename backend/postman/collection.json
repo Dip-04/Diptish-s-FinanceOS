@@ -1,6 +1,6 @@
 {
   "info": {
-    "name": "Diptish's Finance OS API",
+    "name": "Diptish Gohane Finance OS API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -13,6 +13,11 @@
     { "name": "Expenses List", "request": { "method": "GET", "url": "{{baseUrl}}/api/expenses" } },
     { "name": "Loans List", "request": { "method": "GET", "url": "{{baseUrl}}/api/loans" } },
     { "name": "AI Advice", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"question\":\"Which loan should I close first?\"}" }, "url": "{{baseUrl}}/api/ai/advice" } },
-    { "name": "Reports Summary", "request": { "method": "GET", "url": "{{baseUrl}}/api/reports/summary" } }
+    { "name": "Reports Summary", "request": { "method": "GET", "url": "{{baseUrl}}/api/reports/summary" } },
+    { "name": "OCR Mock Upload", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"fileName\":\"statement-july.pdf\"}" }, "url": "{{baseUrl}}/api/ocr/upload" } },
+    { "name": "Voice Process", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"command\":\"Add ₹500 petrol expense\"}" }, "url": "{{baseUrl}}/api/voice/process" } },
+    { "name": "AI Tax Planner", "request": { "method": "POST", "url": "{{baseUrl}}/api/ai-planners/tax" } },
+    { "name": "AI Investment Planner", "request": { "method": "POST", "url": "{{baseUrl}}/api/ai-planners/investments" } },
+    { "name": "Offline Sync Queue", "request": { "method": "GET", "url": "{{baseUrl}}/api/sync/queue" } }
   ]
 }

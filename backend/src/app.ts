@@ -7,6 +7,7 @@ import { authRoutes } from './routes/authRoutes.js'
 import { crudRoutes } from './routes/crudRoutes.js'
 import { documentRoutes } from './routes/documentRoutes.js'
 import { reportRoutes } from './routes/reportRoutes.js'
+import { currencyRoutes, familyRoutes, ocrRoutes, plannerRoutes, reminderRoutes, syncRoutes, voiceRoutes } from './routes/advancedRoutes.js'
 import { errorHandler } from './middleware/errorHandler.js'
 
 export const app = express()
@@ -16,7 +17,7 @@ app.use(cors())
 app.use(express.json({ limit: '2mb' }))
 app.use(morgan('dev'))
 
-app.get('/health', (_req, res) => res.json({ ok: true, service: "Diptish's Finance OS API" }))
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'Diptish Gohane Finance OS API' }))
 app.use('/api/auth', authRoutes)
 app.use('/api/income', crudRoutes('income_sources'))
 app.use('/api/expenses', crudRoutes('expenses'))
@@ -32,4 +33,11 @@ app.use('/api/reports', reportRoutes)
 app.use('/api/ai', aiRoutes)
 app.use('/api/documents', documentRoutes)
 app.use('/api/notifications', crudRoutes('notifications'))
+app.use('/api/ocr', ocrRoutes)
+app.use('/api/reminders', reminderRoutes)
+app.use('/api/voice', voiceRoutes)
+app.use('/api/family', familyRoutes)
+app.use('/api/ai-planners', plannerRoutes)
+app.use('/api/currencies', currencyRoutes)
+app.use('/api/sync', syncRoutes)
 app.use(errorHandler)

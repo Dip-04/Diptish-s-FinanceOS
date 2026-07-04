@@ -3,7 +3,7 @@ import type { PropsWithChildren } from 'react'
 import { categoryBreakdown, cashflow } from '../../constants/finance'
 import { GlassCard } from '../ui/GlassCard'
 
-const colors = ['#22D3EE', '#8B5CF6', '#10B981', '#F59E0B', '#F43F5E']
+const colors = ['#C6FF3D', '#FF6B6B', '#F5C76B', '#B76CFF', '#4ADE80']
 
 export function ChartGrid() {
   return (
@@ -15,8 +15,8 @@ export function ChartGrid() {
             <XAxis dataKey="name" stroke="#94A3B8" />
             <YAxis stroke="#94A3B8" />
             <Tooltip contentStyle={{ background: '#080B1F', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 16 }} />
-            <Bar dataKey="income" fill="#22D3EE" radius={[10, 10, 0, 0]} />
-            <Bar dataKey="expenses" fill="#8B5CF6" radius={[10, 10, 0, 0]} />
+            <Bar dataKey="income" fill="#C6FF3D" radius={[10, 10, 0, 0]} />
+            <Bar dataKey="expenses" fill="#FF6B6B" radius={[10, 10, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </ChartShell>
@@ -31,13 +31,13 @@ export function ChartGrid() {
         </ResponsiveContainer>
       </ChartShell>
       <ChartShell title="Savings Trend">
-        <AreaSeries dataKey="savings" color="#10B981" />
+        <AreaSeries dataKey="savings" color="#4ADE80" />
       </ChartShell>
       <ChartShell title="Debt Payoff Progress">
-        <AreaSeries dataKey="debt" color="#F43F5E" />
+        <AreaSeries dataKey="debt" color="#FB3B5F" />
       </ChartShell>
       <ChartShell title="Net Worth Growth">
-        <AreaSeries dataKey="netWorth" color="#22D3EE" />
+        <AreaSeries dataKey="netWorth" color="#C6FF3D" />
       </ChartShell>
     </div>
   )
