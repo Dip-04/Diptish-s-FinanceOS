@@ -11,11 +11,28 @@ $$ language plpgsql;
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   full_name text,
+  phone text,
+  email text,
   avatar_url text,
+  currency_preference text default 'INR',
+  monthly_salary numeric(14,2) default 0,
+  default_budget numeric(14,2) default 0,
+  financial_goal text,
+  notification_preferences text,
+  family_members text,
   credit_score integer,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.profiles add column if not exists phone text;
+alter table public.profiles add column if not exists email text;
+alter table public.profiles add column if not exists currency_preference text default 'INR';
+alter table public.profiles add column if not exists monthly_salary numeric(14,2) default 0;
+alter table public.profiles add column if not exists default_budget numeric(14,2) default 0;
+alter table public.profiles add column if not exists financial_goal text;
+alter table public.profiles add column if not exists notification_preferences text;
+alter table public.profiles add column if not exists family_members text;
 
 create table if not exists public.income_sources (
   id uuid primary key default gen_random_uuid(),
@@ -240,6 +257,7 @@ begin
 end $$;
 
 create policy "Users can manage own income" on public.income_sources for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy "Users can manage own profile" on public.profiles for all using (auth.uid() = id) with check (auth.uid() = id);
 create policy "Users can manage own expenses" on public.expenses for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users can manage own monthly plans" on public.monthly_plans for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "Users can manage own loans" on public.loans for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

@@ -6,8 +6,8 @@
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "browser"],
   "orientation": "portrait-primary",
-  "background_color": "#0B0D10",
-  "theme_color": "#C6FF3D",
+  "background_color": "#F7F4EF",
+  "theme_color": "#F7F4EF",
   "description": "A premium mobile-first financial operating system for planning, tracking, OCR, voice entries, reminders, and AI money coaching.",
   "categories": ["finance", "productivity"],
   "icons": [

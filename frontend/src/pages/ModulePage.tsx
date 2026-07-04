@@ -46,7 +46,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         title={config.title}
         subtitle={config.subtitle}
         icon={config.icon}
-        action={<button onClick={() => setOpen(true)} className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-300 to-violet-500 px-4 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-cyan-500/20"><Plus size={18} /> Add record</button>}
+        action={<button onClick={() => setOpen(true)} className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-[#111827] px-4 py-3 text-sm font-semibold text-white shadow-sm"><Plus size={18} /> Add record</button>}
       />
       <div className="mb-5 grid gap-4 md:grid-cols-2">
         <GlassCard className="p-5">
@@ -64,7 +64,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
       <Modal title={`Add ${config.title}`} open={open} onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 md:grid-cols-2">
           {config.fields.map((field) => <FormControl key={field.name} field={field} register={register} />)}
-          <button className="rounded-2xl bg-gradient-to-r from-cyan-300 to-violet-500 px-4 py-3 font-semibold text-slate-950 md:col-span-2">Save record</button>
+          <button className="min-h-12 rounded-2xl bg-[#111827] px-4 py-3 font-semibold text-white md:col-span-2">Save record</button>
         </form>
       </Modal>
     </div>

@@ -7,7 +7,7 @@ type FormControlProps<T extends FieldValues> = {
 }
 
 export function FormControl<T extends FieldValues>({ field, register }: FormControlProps<T>) {
-  const base = 'w-full rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300/70'
+  const base = 'w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none transition placeholder:text-gray-400 focus:border-[#2A9D8F]'
   const name = field.name as Path<T>
 
   if (field.type === 'textarea') {
@@ -25,8 +25,8 @@ export function FormControl<T extends FieldValues>({ field, register }: FormCont
 
   if (field.type === 'checkbox') {
     return (
-      <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-slate-300">
-        <input {...register(name)} type="checkbox" className="h-4 w-4 accent-cyan-300" />
+      <label className="flex items-center gap-3 rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-gray-600">
+        <input {...register(name)} type="checkbox" className="h-4 w-4 accent-[#2A9D8F]" />
         {field.label}
       </label>
     )

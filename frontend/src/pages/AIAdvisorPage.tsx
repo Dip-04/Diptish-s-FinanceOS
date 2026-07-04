@@ -24,14 +24,14 @@ export function AIAdvisorPage() {
       <PageHeader title="AI Finance Advisor" subtitle="Ask affordability, debt payoff, savings, goal, overspending, and future prediction questions." icon={Bot} />
       <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
         <GlassCard className="p-5">
-          <textarea value={question} onChange={(event) => setQuestion(event.target.value)} className="min-h-36 w-full rounded-3xl border border-white/10 bg-white/[0.06] p-4 text-slate-100 outline-none focus:border-cyan-300/70" />
-          <button onClick={ask} className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-cyan-300 to-violet-500 px-4 py-3 font-semibold text-slate-950"><Send size={18} /> Ask advisor</button>
-          <div className="mt-6 rounded-3xl border border-cyan-300/20 bg-cyan-300/10 p-5 text-slate-100">{answer}</div>
+          <textarea value={question} onChange={(event) => setQuestion(event.target.value)} className="min-h-36 w-full rounded-3xl border border-gray-200 bg-[#F9FAFB] p-4 text-[#111827] outline-none focus:border-[#2A9D8F]" />
+          <button onClick={ask} className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-[#111827] px-4 py-3 font-semibold text-white"><Send size={18} /> Ask advisor</button>
+          <div className="mt-6 rounded-3xl border border-[#2A9D8F]/20 bg-[#2A9D8F]/10 p-5 text-[#111827]">{answer}</div>
         </GlassCard>
         <GlassCard className="p-5">
           <h2 className="text-lg font-semibold text-slate-50">Example questions</h2>
           <div className="mt-4 space-y-2">
-            {examples.map((item) => <button key={item} onClick={() => setQuestion(item)} className="w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm text-slate-300 hover:bg-white/[0.08]">{item}</button>)}
+            {examples.map((item) => <button key={item} onClick={() => setQuestion(item)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-left text-sm text-gray-600 hover:bg-white">{item}</button>)}
           </div>
         </GlassCard>
       </div>

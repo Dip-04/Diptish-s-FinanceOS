@@ -21,29 +21,29 @@ export function Topbar() {
   }
 
   return (
-    <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0B0D10]/72 px-4 py-4 backdrop-blur-2xl lg:pl-80">
+    <header className="sticky top-0 z-20 border-b border-gray-200 bg-[#F7F4EF]/95 px-4 py-4 lg:pl-80">
       <div className="mx-auto flex max-w-7xl items-center gap-3">
-        <button onClick={() => setSidebarOpen(true)} className="rounded-2xl border border-white/10 p-2 text-slate-200 lg:hidden" aria-label="Open navigation">
+        <button onClick={() => setSidebarOpen(true)} className="rounded-2xl border border-gray-200 bg-white p-2 text-[#111827] lg:hidden" aria-label="Open navigation">
           <Menu size={20} />
         </button>
-        <div className="hidden flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.045] px-4 py-3 text-zinc-500 md:flex">
+        <div className="hidden flex-1 items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-500 md:flex">
           <Search size={18} />
           <span className="text-sm">Search transactions, loans, goals...</span>
         </div>
-        <span className={`rounded-full border px-3 py-2 text-xs font-semibold md:hidden ${syncStatus === 'online' ? 'border-[#4ADE80]/25 bg-[#4ADE80]/10 text-[#4ADE80]' : 'border-[#F5C76B]/25 bg-[#F5C76B]/10 text-[#F5C76B]'}`}>
+        <span className={`rounded-full border bg-white px-3 py-2 text-xs font-semibold md:hidden ${syncStatus === 'online' ? 'border-[#16A34A]/25 text-[#16A34A]' : 'border-[#F59E0B]/25 text-[#F59E0B]'}`}>
           {syncStatus === 'online' ? 'Online' : 'Offline'}
         </span>
-        <button className="ml-auto rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Notifications">
+        <button className="ml-auto rounded-2xl border border-gray-200 bg-white p-3 text-gray-600 hover:bg-[#F9FAFB]" aria-label="Notifications">
           <Bell size={18} />
         </button>
-        <Link to="/profile" className="hidden items-center gap-2 rounded-2xl border border-white/10 px-3 py-2 text-sm text-zinc-300 hover:bg-white/10 sm:flex" aria-label="Profile">
+        <Link to="/profile" className="hidden items-center gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-[#F9FAFB] sm:flex" aria-label="Profile">
           <UserRound size={18} />
           <span className="max-w-28 truncate">{user?.fullName ?? user?.name ?? user?.email ?? 'Profile'}</span>
         </Link>
-        <Link to="/profile" className="rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10 sm:hidden" aria-label="Profile">
+        <Link to="/profile" className="rounded-2xl border border-gray-200 bg-white p-3 text-gray-700 hover:bg-[#F9FAFB] sm:hidden" aria-label="Profile">
           <UserRound size={18} />
         </Link>
-        <button onClick={handleLogout} className="rounded-2xl border border-white/10 p-3 text-zinc-300 hover:bg-white/10" aria-label="Logout">
+        <button onClick={handleLogout} className="rounded-2xl border border-gray-200 bg-white p-3 text-gray-700 hover:bg-[#F9FAFB]" aria-label="Logout">
           <LogOut size={18} />
         </button>
       </div>

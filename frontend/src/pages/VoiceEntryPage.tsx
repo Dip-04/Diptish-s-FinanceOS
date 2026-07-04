@@ -11,7 +11,7 @@ export function VoiceEntryPage() {
       <PageHeader title="Voice Expense Entry" subtitle="Browser speech recognition when available, with manual fallback for every command." icon={Mic} />
       <GlassCard className="p-5">
         <VoiceCommandBar onSubmit={(command) => setResult(`Parsed command: ${command}. Ready to confirm as a transaction.`)} />
-        <div className="mt-5 rounded-3xl border border-[#C6FF3D]/20 bg-[#C6FF3D]/10 p-5 text-white">{result}</div>
+        <div className="mt-5 rounded-3xl border border-[#2A9D8F]/20 bg-[#2A9D8F]/10 p-5 text-[#111827]">{result}</div>
       </GlassCard>
     </div>
   )

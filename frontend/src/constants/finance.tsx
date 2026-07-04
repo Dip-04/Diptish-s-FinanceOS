@@ -66,7 +66,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Track salary, freelance, business, bonuses, interest, dividends, gifts, and refunds.',
     endpoint: '/income',
     icon: Banknote,
-    accent: 'from-[#C6FF3D] to-[#F5C76B]',
+    accent: 'from-[#2A9D8F] to-[#111827]',
     fields: [
       { name: 'source_name', label: 'Source name' },
       { name: 'amount', label: 'Amount', type: 'number' },
@@ -87,7 +87,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Control every rupee across fixed, variable, recurring, and one-time expenses.',
     endpoint: '/expenses',
     icon: ReceiptText,
-    accent: 'from-[#FF6B6B] to-[#F5C76B]',
+    accent: 'from-[#E76F51] to-[#DC2626]',
     fields: [
       { name: 'expense_name', label: 'Expense name' },
       { name: 'category', label: 'Category', type: 'select', options: ['Rent', 'EMI', 'Loan', 'Food', 'Petrol', 'Shopping', 'Travel', 'Gym', 'Medical', 'Family', 'Bills', 'Insurance', 'Education', 'Entertainment', 'Savings', 'Other'] },
@@ -108,7 +108,7 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     subtitle: 'Analyze loans, prepayments, interest pressure, and the best debt to close first.',
     endpoint: '/loans',
     icon: Landmark,
-    accent: 'from-[#B76CFF] to-[#FB3B5F]',
+    accent: 'from-[#111827] to-[#E76F51]',
     fields: [
       { name: 'loan_name', label: 'Loan name' },
       { name: 'lender_name', label: 'Lender' },
@@ -125,12 +125,12 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
       { id: 'loan-2', loan_name: 'Bike Loan', lender_name: 'HDFC', loan_type: 'Bike Loan', total_loan_amount: 90000, interest_rate: 12.5, emi_amount: 5000, outstanding_amount: 45000, status: 'Active' },
     ],
   },
-  emis: makeModule('EMI Tracker', '/emis', WalletCards, 'from-[#4ADE80] to-[#C6FF3D]', 'Track upcoming, paid, missed, penalty, and completion status for every EMI.', 'emi_name'),
-  'credit-cards': makeModule('Credit Card Manager', '/credit-cards', CreditCard, 'from-[#C6FF3D] to-[#B76CFF]', 'Monitor limits, billing dates, due amounts, minimum due, interest, and rewards.', 'card_name'),
-  goals: makeModule('Savings Goals', '/goals', Target, 'from-[#4ADE80] to-[#F5C76B]', 'Plan iPhone, bike, trip, emergency fund, house, and investment goals.', 'goal_name'),
-  wishlist: makeModule('Wishlist Planner', '/wishlist', Sparkles, 'from-[#B76CFF] to-[#FF6B6B]', 'Calculate affordable dates, monthly saving required, and purchase priority.', 'item_name'),
-  investments: makeModule('Investment Tracker', '/investments', ChartNoAxesCombined, 'from-[#C6FF3D] to-[#4ADE80]', 'Track FD, RD, mutual funds, stocks, gold, crypto, PPF, NPS, EPF, and real estate.', 'investment_name'),
-  insurance: makeModule('Insurance Tracker', '/insurance', ShieldCheck, 'from-[#F5C76B] to-[#FF6B6B]', 'Manage health, life, vehicle, travel policies, premiums, coverage, and renewals.', 'policy_name'),
+  emis: makeModule('EMI Tracker', '/emis', WalletCards, 'from-[#E9C46A] to-[#E76F51]', 'Track upcoming, paid, missed, penalty, and completion status for every EMI.', 'emi_name'),
+  'credit-cards': makeModule('Credit Card Manager', '/credit-cards', CreditCard, 'from-[#111827] to-[#2A9D8F]', 'Monitor limits, billing dates, due amounts, minimum due, interest, and rewards.', 'card_name'),
+  goals: makeModule('Savings Goals', '/goals', Target, 'from-[#2A9D8F] to-[#111827]', 'Plan iPhone, bike, trip, emergency fund, house, and investment goals.', 'goal_name'),
+  wishlist: makeModule('Wishlist Planner', '/wishlist', Sparkles, 'from-[#E76F51] to-[#E9C46A]', 'Calculate affordable dates, monthly saving required, and purchase priority.', 'item_name'),
+  investments: makeModule('Investment Tracker', '/investments', ChartNoAxesCombined, 'from-[#2A9D8F] to-[#111827]', 'Track FD, RD, mutual funds, stocks, gold, crypto, PPF, NPS, EPF, and real estate.', 'investment_name'),
+  insurance: makeModule('Insurance Tracker', '/insurance', ShieldCheck, 'from-[#E9C46A] to-[#E76F51]', 'Manage health, life, vehicle, travel policies, premiums, coverage, and renewals.', 'policy_name'),
 }
 
 function makeModule(title: string, endpoint: string, icon: ModuleConfig<FinanceRecord>['icon'], accent: string, subtitle: string, nameKey: string): ModuleConfig<FinanceRecord> {
@@ -153,14 +153,14 @@ function makeModule(title: string, endpoint: string, icon: ModuleConfig<FinanceR
 }
 
 export const dashboardStats = [
-  { label: 'Total Balance', value: 12400, icon: BadgeIndianRupee, accent: 'from-[#C6FF3D] to-[#F5C76B]' },
-  { label: 'Monthly Income', value: 92000, icon: Banknote, accent: 'from-[#4ADE80] to-[#C6FF3D]' },
-  { label: 'Monthly Expenses', value: 90000, icon: ReceiptText, accent: 'from-[#FF6B6B] to-[#F5C76B]' },
-  { label: 'Savings', value: 2000, icon: PiggyBank, accent: 'from-[#4ADE80] to-[#F5C76B]' },
-  { label: 'Total Debt', value: 45869, icon: Landmark, accent: 'from-[#B76CFF] to-[#FB3B5F]' },
-  { label: 'Net Worth', value: 218000, icon: Building2, accent: 'from-[#C6FF3D] to-[#B76CFF]' },
-  { label: 'Upcoming EMI', value: 18000, icon: WalletCards, accent: 'from-[#F5C76B] to-[#FF6B6B]' },
-  { label: 'Health Score', value: 74, icon: HeartPulse, accent: 'from-[#4ADE80] to-[#C6FF3D]', suffix: '/100' },
+  { label: 'Total Balance', value: 12400, icon: BadgeIndianRupee, accent: 'from-[#111827] to-[#2A9D8F]' },
+  { label: 'Monthly Income', value: 92000, icon: Banknote, accent: 'from-[#2A9D8F] to-[#111827]' },
+  { label: 'Monthly Expenses', value: 90000, icon: ReceiptText, accent: 'from-[#E76F51] to-[#DC2626]' },
+  { label: 'Savings', value: 2000, icon: PiggyBank, accent: 'from-[#16A34A] to-[#2A9D8F]' },
+  { label: 'Total Debt', value: 45869, icon: Landmark, accent: 'from-[#111827] to-[#E76F51]' },
+  { label: 'Net Worth', value: 218000, icon: Building2, accent: 'from-[#2A9D8F] to-[#E9C46A]' },
+  { label: 'Upcoming EMI', value: 18000, icon: WalletCards, accent: 'from-[#E9C46A] to-[#E76F51]' },
+  { label: 'Health Score', value: 74, icon: HeartPulse, accent: 'from-[#111827] to-[#2A9D8F]', suffix: '/100' },
 ]
 
 export const cashflow = [

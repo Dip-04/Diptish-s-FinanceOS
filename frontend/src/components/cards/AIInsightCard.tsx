@@ -5,9 +5,9 @@ export function AIInsightCard() {
   return (
     <GlassCard className="overflow-hidden p-6">
       <div className="flex items-center gap-3">
-        <span className="rounded-2xl bg-[#C6FF3D]/15 p-3 text-[#C6FF3D]"><Bot size={22} /></span>
+        <span className="rounded-2xl bg-[#F1F5F9] p-3 text-[#E76F51]"><Bot size={22} /></span>
         <div>
-          <p className="text-sm uppercase tracking-[0.18em] text-[#C6FF3D]">AI financial brain</p>
+          <p className="text-sm uppercase tracking-[0.18em] text-[#E76F51]">AI financial brain</p>
           <h3 className="text-xl font-semibold text-slate-50">July has high debt pressure.</h3>
         </div>
       </div>
