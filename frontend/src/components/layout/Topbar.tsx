@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { Bell, LogOut, Menu, Search, UserRound } from 'lucide-react'
 import { useFinanceStore } from '../../store/useFinanceStore'
+import { getErrorMessage } from '../../services/api'
 import { logout } from '../../services/auth'
 import { useAuthStore } from '../../store/useAuthStore'
+import { useToastStore } from '../../store/useToastStore'
 
 export function Topbar() {
   const navigate = useNavigate()
@@ -10,10 +12,14 @@ export function Topbar() {
   const syncStatus = useFinanceStore((state) => state.syncStatus)
   const user = useAuthStore((state) => state.user)
   const clearAuth = useAuthStore((state) => state.clearAuth)
+  const showToast = useToastStore((state) => state.showToast)
 
   async function handleLogout() {
     try {
       await logout()
+      showToast({ type: 'success', title: 'Logged out', message: 'You have been signed out successfully.' })
+    } catch (error) {
+      showToast({ type: 'warning', title: 'Logged out locally', message: getErrorMessage(error, 'Server logout failed, but your local session was cleared.') })
     } finally {
       clearAuth()
       navigate('/login')

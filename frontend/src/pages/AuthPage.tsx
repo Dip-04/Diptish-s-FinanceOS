@@ -5,8 +5,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { GlassCard } from '../components/ui/GlassCard'
+import { getErrorMessage } from '../services/api'
 import { forgotPassword, login, resetPassword } from '../services/auth'
 import { useAuthStore } from '../store/useAuthStore'
+import { useToastStore } from '../store/useToastStore'
 
 const authFormSchema = z.object({
   fullName: z.string().optional(),
@@ -19,10 +21,10 @@ type AuthFormValues = z.infer<typeof authFormSchema>
 
 export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 'reset' }) {
   const [showPassword, setShowPassword] = useState(false)
-  const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const setAuth = useAuthStore((state) => state.setAuth)
+  const showToast = useToastStore((state) => state.showToast)
   const title = mode === 'forgot' ? 'Recover access' : mode === 'reset' ? 'Reset password' : 'Admin login'
   const cta = mode === 'forgot' ? 'Send reset link' : mode === 'reset' ? 'Update password' : 'Login'
   const { register: formRegister, handleSubmit, formState: { errors } } = useForm<AuthFormValues>({
@@ -32,17 +34,16 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
 
   async function onSubmit(values: AuthFormValues) {
     setSubmitting(true)
-    setMessage('')
     try {
       if (mode === 'forgot') {
         await forgotPassword(values.email)
-        setMessage('Reset link sent if this email exists. Check your inbox.')
+        showToast({ type: 'success', title: 'Reset link sent', message: 'If this email exists, check your inbox for the recovery link.' })
         return
       }
 
       if (mode === 'reset') {
         await resetPassword(values.email, values.password ?? '')
-        setMessage('Password reset complete. You can login now.')
+        showToast({ type: 'success', title: 'Password updated', message: 'You can login with your new password now.' })
         setTimeout(() => navigate('/login'), 900)
         return
       }
@@ -50,9 +51,10 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
       const payload = await login(values.email, values.password ?? '')
 
       setAuth({ user: payload.user, session: payload.session ?? null, rememberMe: Boolean(values.rememberMe) })
+      showToast({ type: 'success', title: 'Login successful', message: `Welcome back, ${payload.user.fullName ?? payload.user.name ?? payload.user.email}.` })
       navigate('/')
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Authentication failed. Please try again.')
+      showToast({ type: 'error', title: 'Authentication failed', message: getErrorMessage(error, 'Please check your details and try again.') })
     } finally {
       setSubmitting(false)
     }
@@ -111,7 +113,6 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
             {cta}
           </button>
         </form>
-        {message && <div className="mt-4 rounded-2xl border border-gray-200 bg-[#F9FAFB] p-3 text-sm text-gray-700">{message}</div>}
         <div className="mt-5 flex items-center justify-between text-sm text-gray-600">
           <Link className="font-semibold text-[#2A9D8F]" to="/forgot-password">Forgot password?</Link>
           <span className="font-semibold text-[#111827]">Diptish admin only</span>

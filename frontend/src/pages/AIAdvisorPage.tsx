@@ -1,21 +1,25 @@
 import { useState } from 'react'
 import { Bot, Send } from 'lucide-react'
-import { api } from '../services/api'
+import { api, getErrorMessage } from '../services/api'
 import { GlassCard } from '../components/ui/GlassCard'
 import { PageHeader } from '../components/ui/PageHeader'
+import { useToastStore } from '../store/useToastStore'
 
 const examples = ['Can I buy an iPhone next month?', 'Which loan should I close first?', 'How much should I save every month?', 'When will I become debt free?', 'Can I go on a trip in December?', 'How can I reduce expenses?']
 
 export function AIAdvisorPage() {
   const [question, setQuestion] = useState(examples[0])
   const [answer, setAnswer] = useState('Ask anything about your money. If OpenAI is not configured, the backend returns rule-based advice from your financial data.')
+  const showToast = useToastStore((state) => state.showToast)
 
   async function ask() {
     try {
       const { data } = await api.post<{ advice: string }>('/ai/advice', { question })
       setAnswer(data.advice)
-    } catch {
+      showToast({ type: 'success', title: 'Advice ready', message: 'Your finance advisor response has been updated.' })
+    } catch (error) {
       setAnswer('No. Current debt is ₹52,000. If you wait until November, you can comfortably buy it while protecting cashflow.')
+      showToast({ type: 'warning', title: 'Using fallback advice', message: getErrorMessage(error, 'The AI service is unavailable right now.') })
     }
   }
 

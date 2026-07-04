@@ -1,2 +1,9 @@
 ◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
 Diptish's Finance OS API running on http://localhost:4000
+[0mGET /health [32m200[0m 9.683 ms - 48[0m
+[0mPOST /api/income [32m201[0m 27.392 ms - 154[0m
+[0mPOST /api/ai/advice [32m200[0m 110.045 ms - 132[0m
+[0mPOST /api/auth/login [32m200[0m 6.738 ms - 82[0m
+[0mPOST /api/income [32m201[0m 0.741 ms - 177[0m
+[0mPOST /api/credit-cards [32m201[0m 0.614 ms - 205[0m
+[0mPOST /api/goals [32m201[0m 0.609 ms - 223[0m

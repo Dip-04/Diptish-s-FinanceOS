@@ -3,6 +3,7 @@ import { CheckCircle2, FileScan, Loader2 } from 'lucide-react'
 import { GlassCard } from '../components/ui/GlassCard'
 import { PageHeader } from '../components/ui/PageHeader'
 import { extractTextFromImage, parseTransactionsFromText, type ParsedTransaction } from '../services/ocr'
+import { useToastStore } from '../store/useToastStore'
 import { currency } from '../utils/format'
 
 export function OCRPage() {
@@ -10,10 +11,12 @@ export function OCRPage() {
   const [progress, setProgress] = useState('')
   const [transactions, setTransactions] = useState<ParsedTransaction[]>([])
   const [busy, setBusy] = useState(false)
+  const showToast = useToastStore((state) => state.showToast)
 
   async function runBrowserOcr(file: File) {
     if (file.type === 'application/pdf') {
       setProgress('PDF selected. Browser OCR is best for images; use backend mock/provider flow for complex PDFs.')
+      showToast({ type: 'info', title: 'PDF selected', message: 'Browser OCR works best with image bills or screenshots.' })
       return
     }
 
@@ -26,8 +29,10 @@ export function OCRPage() {
       setText(extracted)
       setTransactions(parseTransactionsFromText(extracted))
       setProgress('OCR complete')
-    } catch {
+      showToast({ type: 'success', title: 'OCR complete', message: 'Text was extracted and the review queue was updated.' })
+    } catch (error) {
       setProgress('OCR failed. Try a clearer image or smaller file.')
+      showToast({ type: 'error', title: 'OCR failed', message: error instanceof Error ? error.message : 'Try a clearer image or smaller file.' })
     } finally {
       setBusy(false)
     }

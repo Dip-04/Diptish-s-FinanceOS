@@ -9,8 +9,9 @@ import { Modal } from '../components/ui/Modal'
 import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
 import { modules } from '../constants/finance'
-import { createRecord, deleteRecord, listRecords, updateRecord } from '../services/api'
+import { createRecord, deleteRecord, getErrorMessage, listRecords, updateRecord } from '../services/api'
 import { enqueueOfflineAction } from '../services/offlineSync'
+import { useToastStore } from '../store/useToastStore'
 import type { FinanceRecord } from '../types/finance'
 
 export function ModulePage({ id }: { id: keyof typeof modules }) {
@@ -18,6 +19,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   const [rows, setRows] = useState<FinanceRecord[]>(config.seed)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<FinanceRecord | null>(null)
+  const showToast = useToastStore((state) => state.showToast)
   const { register, handleSubmit, reset } = useForm<FinanceRecord>()
 
   useEffect(() => {
@@ -38,11 +40,14 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
     try {
       if (editing?.id) {
         await updateRecord(config.endpoint, String(editing.id), payload)
+        showToast({ type: 'success', title: 'Record updated', message: `${config.title} was saved successfully.` })
       } else {
         await createRecord(config.endpoint, payload)
+        showToast({ type: 'success', title: 'Record added', message: `${config.title} was saved successfully.` })
       }
-    } catch {
+    } catch (error) {
       enqueueOfflineAction({ resource: config.endpoint, operation: editing ? 'update' : 'create', payload })
+      showToast({ type: 'warning', title: 'Saved offline', message: `${getErrorMessage(error, 'We could not reach the server.')} This change will sync when you are online.` })
     }
   }
 
@@ -60,12 +65,17 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
 
   async function removeRow(row: FinanceRecord) {
     const id = String(row.id ?? '')
-    if (!id) return
+    if (!id) {
+      showToast({ type: 'error', title: 'Delete failed', message: 'This record does not have a valid ID.' })
+      return
+    }
     setRows((current) => current.filter((item) => item.id !== row.id))
     try {
       await deleteRecord(config.endpoint, id)
-    } catch {
+      showToast({ type: 'success', title: 'Record deleted', message: `${config.title} was removed successfully.` })
+    } catch (error) {
       enqueueOfflineAction({ resource: config.endpoint, operation: 'delete', payload: row })
+      showToast({ type: 'warning', title: 'Delete queued offline', message: `${getErrorMessage(error, 'We could not reach the server.')} The delete will sync when you are online.` })
     }
   }
 

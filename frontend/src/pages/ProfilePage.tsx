@@ -5,8 +5,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { GlassCard } from '../components/ui/GlassCard'
 import { PageHeader } from '../components/ui/PageHeader'
+import { getErrorMessage } from '../services/api'
 import { changePassword, updateProfile } from '../services/auth'
 import { useAuthStore } from '../store/useAuthStore'
+import { useToastStore } from '../store/useToastStore'
 
 const profileSchema = z.object({
   fullName: z.string().min(2),
@@ -37,8 +39,7 @@ export function ProfilePage() {
   const setAuth = useAuthStore((state) => state.setAuth)
   const rememberMe = useAuthStore((state) => state.rememberMe)
   const session = useAuthStore((state) => state.session)
-  const [profileMessage, setProfileMessage] = useState('')
-  const [passwordMessage, setPasswordMessage] = useState('')
+  const showToast = useToastStore((state) => state.showToast)
   const [saving, setSaving] = useState(false)
   const [changing, setChanging] = useState(false)
 
@@ -60,13 +61,12 @@ export function ProfilePage() {
 
   async function saveProfile(values: ProfileValues) {
     setSaving(true)
-    setProfileMessage('')
     try {
       const updated = await updateProfile({ id: user?.id, ...values })
       setAuth({ user: { ...user, ...updated, email: values.email, fullName: values.fullName }, session, rememberMe })
-      setProfileMessage('Profile updated successfully.')
-    } catch {
-      setProfileMessage('Could not update profile. Try again.')
+      showToast({ type: 'success', title: 'Profile saved', message: 'Your profile details were updated successfully.' })
+    } catch (error) {
+      showToast({ type: 'error', title: 'Could not save profile', message: getErrorMessage(error, 'Please review your details and try again.') })
     } finally {
       setSaving(false)
     }
@@ -74,13 +74,12 @@ export function ProfilePage() {
 
   async function savePassword(values: PasswordValues) {
     setChanging(true)
-    setPasswordMessage('')
     try {
       await changePassword(values.currentPassword, values.newPassword)
       passwordForm.reset()
-      setPasswordMessage('Password changed successfully.')
-    } catch {
-      setPasswordMessage('Could not change password. Check current password and try again.')
+      showToast({ type: 'success', title: 'Password changed', message: 'Use your new password the next time you login.' })
+    } catch (error) {
+      showToast({ type: 'error', title: 'Could not change password', message: getErrorMessage(error, 'Check your current password and try again.') })
     } finally {
       setChanging(false)
     }
@@ -115,7 +114,6 @@ export function ProfilePage() {
               Save profile
             </button>
           </form>
-          {profileMessage && <p className="mt-4 rounded-2xl bg-[#F9FAFB] p-3 text-sm text-gray-700">{profileMessage}</p>}
         </GlassCard>
 
         <GlassCard className="p-5">
@@ -136,7 +134,6 @@ export function ProfilePage() {
               Change password
             </button>
           </form>
-          {passwordMessage && <p className="mt-4 rounded-2xl bg-[#F9FAFB] p-3 text-sm text-gray-700">{passwordMessage}</p>}
         </GlassCard>
       </div>
     </div>
