@@ -28,7 +28,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<PublicOnly><AuthPage mode="login" /></PublicOnly>} />
-      <Route path="/register" element={<PublicOnly><AuthPage mode="register" /></PublicOnly>} />
+      <Route path="/register" element={<Navigate to="/login" replace />} />
       <Route path="/forgot-password" element={<PublicOnly><AuthPage mode="forgot" /></PublicOnly>} />
       <Route path="/reset-password" element={<PublicOnly><AuthPage mode="reset" /></PublicOnly>} />
       <Route element={<ProtectedApp />}>

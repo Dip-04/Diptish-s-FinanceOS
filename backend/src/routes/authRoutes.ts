@@ -9,23 +9,8 @@ const changePasswordSchema = z.object({ currentPassword: z.string().min(6), newP
 export const authRoutes = Router()
 
 authRoutes.post('/register', asyncHandler(async (req, res) => {
-  const payload = authSchema.parse(req.body)
-  if (!supabase) return res.status(201).json({ user: { id: 'local-user', email: payload.email, fullName: payload.fullName }, mode: 'local' })
-  const { data, error } = await supabase.auth.admin.createUser({ email: payload.email, password: payload.password, email_confirm: true, user_metadata: { full_name: payload.fullName } })
-  if (error) throw error
-  if (data.user) {
-    await supabase.from('profiles').upsert({
-      id: data.user.id,
-      email: payload.email,
-      full_name: payload.fullName,
-      currency_preference: 'INR',
-      updated_at: new Date().toISOString(),
-    })
-  }
-  return res.status(201).json({
-    ...data,
-    user: data.user ? { ...data.user, fullName: payload.fullName } : data.user,
-  })
+  authSchema.parse(req.body)
+  return res.status(403).json({ message: 'Registration is disabled. Diptish is the only admin user.' })
 }))
 
 authRoutes.post('/login', asyncHandler(async (req, res) => {

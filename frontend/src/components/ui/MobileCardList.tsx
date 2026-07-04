@@ -1,7 +1,7 @@
 import type { TableColumn } from '../../types/finance'
 import { StatusBadge } from './StatusBadge'
 
-export function MobileCardList<T extends Record<string, unknown>>({ rows, columns }: { rows: T[]; columns: TableColumn<T>[] }) {
+export function MobileCardList<T extends Record<string, unknown>>({ rows, columns, renderActions }: { rows: T[]; columns: TableColumn<T>[]; renderActions?: (row: T) => React.ReactNode }) {
   return (
     <div className="grid gap-3 md:hidden">
       {rows.map((row, index) => (
@@ -16,6 +16,7 @@ export function MobileCardList<T extends Record<string, unknown>>({ rows, column
               </div>
             )
           })}
+          {renderActions && <div className="pt-3">{renderActions(row)}</div>}
         </article>
       ))}
     </div>

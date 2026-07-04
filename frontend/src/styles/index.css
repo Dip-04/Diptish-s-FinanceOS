@@ -67,13 +67,6 @@ img, svg, canvas {
   box-shadow: 0 18px 45px rgba(17, 24, 39, 0.07);
 }
 
-.glass .text-white,
-.glass .text-slate-50,
-.glass .text-slate-100,
-.glass .text-zinc-100 {
-  color: #111827 !important;
-}
-
 .glass .text-zinc-300,
 .glass .text-zinc-400,
 .glass .text-slate-300,

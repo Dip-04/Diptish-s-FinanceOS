@@ -17,3 +17,12 @@ export async function createRecord<T>(endpoint: string, payload: T): Promise<T> 
   const { data } = await api.post<T>(endpoint, payload)
   return data
 }
+
+export async function updateRecord<T>(endpoint: string, id: string, payload: T): Promise<T> {
+  const { data } = await api.put<T>(`${endpoint}/${id}`, payload)
+  return data
+}
+
+export async function deleteRecord(endpoint: string, id: string): Promise<void> {
+  await api.delete(`${endpoint}/${id}`)
+}

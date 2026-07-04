@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { GlassCard } from '../components/ui/GlassCard'
-import { forgotPassword, login, register, resetPassword } from '../services/auth'
+import { forgotPassword, login, resetPassword } from '../services/auth'
 import { useAuthStore } from '../store/useAuthStore'
 
 const authFormSchema = z.object({
@@ -23,9 +23,8 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
   const [submitting, setSubmitting] = useState(false)
   const navigate = useNavigate()
   const setAuth = useAuthStore((state) => state.setAuth)
-  const isRegister = mode === 'register'
-  const title = mode === 'forgot' ? 'Recover access' : mode === 'reset' ? 'Reset password' : isRegister ? 'Create your OS' : 'Welcome back'
-  const cta = mode === 'forgot' ? 'Send reset link' : mode === 'reset' ? 'Update password' : isRegister ? 'Create account' : 'Login'
+  const title = mode === 'forgot' ? 'Recover access' : mode === 'reset' ? 'Reset password' : 'Admin login'
+  const cta = mode === 'forgot' ? 'Send reset link' : mode === 'reset' ? 'Update password' : 'Login'
   const { register: formRegister, handleSubmit, formState: { errors } } = useForm<AuthFormValues>({
     resolver: zodResolver(authFormSchema),
     defaultValues: { email: '', password: '', rememberMe: true },
@@ -48,9 +47,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
         return
       }
 
-      const payload = isRegister
-        ? await register(values.fullName ?? '', values.email, values.password ?? '')
-        : await login(values.email, values.password ?? '')
+      const payload = await login(values.email, values.password ?? '')
 
       setAuth({ user: payload.user, session: payload.session ?? null, rememberMe: Boolean(values.rememberMe) })
       navigate('/')
@@ -94,7 +91,6 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
         </div>
         <h2 className="mb-5 text-3xl font-semibold text-[#111827]">{title}</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {isRegister && <input {...formRegister('fullName')} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" placeholder="Full name" />}
           <input {...formRegister('email')} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" placeholder="Email" />
           {errors.email && <p className="text-xs text-[#FB3B5F]">{errors.email.message}</p>}
           {mode !== 'forgot' && (
@@ -118,7 +114,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
         {message && <div className="mt-4 rounded-2xl border border-gray-200 bg-[#F9FAFB] p-3 text-sm text-gray-700">{message}</div>}
         <div className="mt-5 flex items-center justify-between text-sm text-gray-600">
           <Link className="font-semibold text-[#2A9D8F]" to="/forgot-password">Forgot password?</Link>
-          <Link className="font-semibold text-[#F5C76B]" to={isRegister ? '/login' : '/register'}>{isRegister ? 'Login' : 'Register'}</Link>
+          <span className="font-semibold text-[#111827]">Diptish admin only</span>
         </div>
       </GlassCard>
       </section>

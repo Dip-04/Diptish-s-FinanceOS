@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { DataTable } from '../components/ui/DataTable'
 import { EmptyState } from '../components/ui/EmptyState'
@@ -9,7 +9,7 @@ import { Modal } from '../components/ui/Modal'
 import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
 import { modules } from '../constants/finance'
-import { createRecord, listRecords } from '../services/api'
+import { createRecord, deleteRecord, listRecords, updateRecord } from '../services/api'
 import { enqueueOfflineAction } from '../services/offlineSync'
 import type { FinanceRecord } from '../types/finance'
 
@@ -17,6 +17,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   const config = modules[id]
   const [rows, setRows] = useState<FinanceRecord[]>(config.seed)
   const [open, setOpen] = useState(false)
+  const [editing, setEditing] = useState<FinanceRecord | null>(null)
   const { register, handleSubmit, reset } = useForm<FinanceRecord>()
 
   useEffect(() => {
@@ -29,16 +30,57 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   }, [rows])
 
   async function onSubmit(values: FinanceRecord) {
-    const payload = { id: crypto.randomUUID(), status: 'Active', ...values }
-    setRows((current) => [payload, ...current])
+    const payload = { id: editing?.id ?? crypto.randomUUID(), status: editing?.status ?? 'Active', ...values }
+    setRows((current) => editing ? current.map((row) => row.id === editing.id ? payload : row) : [payload, ...current])
     setOpen(false)
+    setEditing(null)
     reset()
     try {
-      await createRecord(config.endpoint, payload)
+      if (editing?.id) {
+        await updateRecord(config.endpoint, String(editing.id), payload)
+      } else {
+        await createRecord(config.endpoint, payload)
+      }
     } catch {
-      enqueueOfflineAction({ resource: config.endpoint, operation: 'create', payload })
+      enqueueOfflineAction({ resource: config.endpoint, operation: editing ? 'update' : 'create', payload })
     }
   }
+
+  function startCreate() {
+    setEditing(null)
+    reset({})
+    setOpen(true)
+  }
+
+  function startEdit(row: FinanceRecord) {
+    setEditing(row)
+    reset(row)
+    setOpen(true)
+  }
+
+  async function removeRow(row: FinanceRecord) {
+    const id = String(row.id ?? '')
+    if (!id) return
+    setRows((current) => current.filter((item) => item.id !== row.id))
+    try {
+      await deleteRecord(config.endpoint, id)
+    } catch {
+      enqueueOfflineAction({ resource: config.endpoint, operation: 'delete', payload: row })
+    }
+  }
+
+  const rowActions = (row: FinanceRecord) => (
+    <div className="flex flex-wrap gap-2">
+      <button type="button" onClick={() => startEdit(row)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[#111827] shadow-sm">
+        <Pencil size={15} />
+        Edit
+      </button>
+      <button type="button" onClick={() => void removeRow(row)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#DC2626] px-3 py-2 text-sm font-semibold text-white shadow-sm">
+        <Trash2 size={15} />
+        Delete
+      </button>
+    </div>
+  )
 
   return (
     <div>
@@ -46,7 +88,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         title={config.title}
         subtitle={config.subtitle}
         icon={config.icon}
-        action={<button onClick={() => setOpen(true)} className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-[#111827] px-4 py-3 text-sm font-semibold text-white shadow-sm"><Plus size={18} /> Add record</button>}
+        action={<button onClick={startCreate} className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-[#111827] px-4 py-3 text-sm font-semibold text-white shadow-sm"><Plus size={18} /> Add record</button>}
       />
       <div className="mb-5 grid gap-4 md:grid-cols-2">
         <GlassCard className="p-5">
@@ -59,9 +101,9 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         </GlassCard>
       </div>
       <GlassCard className="p-4">
-        {rows.length ? <><MobileCardList rows={rows} columns={config.columns} /><DataTable rows={rows} columns={config.columns} /></> : <EmptyState />}
+        {rows.length ? <><MobileCardList rows={rows} columns={config.columns} renderActions={rowActions} /><DataTable rows={rows} columns={config.columns} renderActions={rowActions} /></> : <EmptyState />}
       </GlassCard>
-      <Modal title={`Add ${config.title}`} open={open} onClose={() => setOpen(false)}>
+      <Modal title={`${editing ? 'Edit' : 'Add'} ${config.title}`} open={open} onClose={() => { setOpen(false); setEditing(null); reset({}) }}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 md:grid-cols-2">
           {config.fields.map((field) => <FormControl key={field.name} field={field} register={register} />)}
           <button className="min-h-12 rounded-2xl bg-[#111827] px-4 py-3 font-semibold text-white md:col-span-2">Save record</button>
