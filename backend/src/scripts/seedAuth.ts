@@ -6,12 +6,9 @@ const demoUser = {
   email: 'diptishgohane04@gmail.com',
   password: 'Dipking@04',
   phone: '+918261950281',
-  currencyPreference: 'INR',
   monthlySalary: 92000,
   defaultBudget: 50000,
   financialGoal: 'Become debt free and build wealth',
-  notificationPreferences: 'EMI, rent, credit card, insurance, savings reminders',
-  familyMembers: 'Mummy, Tanu',
 }
 
 async function seedAuth() {
@@ -48,13 +45,9 @@ async function seedAuth() {
     full_name: demoUser.fullName,
     email: demoUser.email,
     phone: demoUser.phone,
-    currency_preference: demoUser.currencyPreference,
     monthly_salary: demoUser.monthlySalary,
     default_budget: demoUser.defaultBudget,
     financial_goal: demoUser.financialGoal,
-    notification_preferences: demoUser.notificationPreferences,
-    family_members: demoUser.familyMembers,
-    credit_score: 760,
     updated_at: new Date().toISOString(),
   })
   if (profileError) throw profileError
@@ -79,13 +72,13 @@ async function seedFinanceData(userId: string) {
   const expenses = [
     ['Rent', 'Rent', 11000, 7, '2026-07-05', 'Paid', 'Critical'],
     ['Bike EMI', 'EMI', 5000, 7, '2026-07-10', 'Paid', 'High'],
-    ['Tanu', 'Family', 35000, 7, '2026-07-12', 'Planned', 'High'],
+    ['Home support', 'Bills', 35000, 7, '2026-07-12', 'Planned', 'High'],
     ['Slice', 'Loan', 29000, 7, '2026-07-15', 'Planned', 'Critical'],
     ['Monthly expenses', 'Food', 10000, 7, '2026-07-20', 'Planned', 'Medium'],
     ['Petrol', 'Petrol', 2000, 7, '2026-07-21', 'Planned', 'Medium'],
     ['Savings', 'Savings', 2000, 7, '2026-07-25', 'Planned', 'High'],
     ['Rent', 'Rent', 12500, 8, '2026-08-05', 'Planned', 'Critical'],
-    ['Mummy', 'Family', 40000, 8, '2026-08-12', 'Planned', 'High'],
+    ['Home support', 'Bills', 40000, 8, '2026-08-12', 'Planned', 'High'],
     ['Slice', 'Loan', 27500, 8, '2026-08-15', 'Planned', 'Critical'],
     ['Monthly expenses', 'Food', 10000, 8, '2026-08-20', 'Planned', 'Medium'],
     ['Petrol', 'Petrol', 2000, 8, '2026-08-21', 'Planned', 'Medium'],
@@ -146,8 +139,8 @@ async function resetDemoFinanceData(userId: string) {
 
 async function seedMonthlyPlans(userId: string) {
   const plans = [
-    { month: 7, year: 2026, income: 92000, items: [['Rent', 11000], ['Bike EMI', 5000], ['Tanu', 35000], ['Slice', 29000], ['Monthly expenses', 10000], ['Petrol', 2000], ['Savings', 2000]] },
-    { month: 8, year: 2026, income: 92000, items: [['Rent', 12500], ['Mummy', 40000], ['Slice', 27500], ['Monthly expenses', 10000], ['Petrol', 2000], ['Savings', 0]] },
+    { month: 7, year: 2026, income: 92000, items: [['Rent', 11000], ['Bike EMI', 5000], ['Home support', 35000], ['Slice', 29000], ['Monthly expenses', 10000], ['Petrol', 2000], ['Savings', 2000]] },
+    { month: 8, year: 2026, income: 92000, items: [['Rent', 12500], ['Home support', 40000], ['Slice', 27500], ['Monthly expenses', 10000], ['Petrol', 2000], ['Savings', 0]] },
     { month: 9, year: 2026, income: 52000, items: [['Rent', 12500], ['Slice EMI', 18000], ['Monthly expenses', 10000], ['Petrol', 2000], ['Savings', 2000]] },
   ] as const
 

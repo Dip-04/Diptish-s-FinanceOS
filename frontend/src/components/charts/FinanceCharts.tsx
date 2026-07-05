@@ -36,9 +36,6 @@ export function ChartGrid() {
       <ChartShell title="Debt Payoff Progress">
         <AreaSeries dataKey="debt" color="#DC2626" />
       </ChartShell>
-      <ChartShell title="Net Worth Growth">
-        <AreaSeries dataKey="netWorth" color="#2A9D8F" />
-      </ChartShell>
     </div>
   )
 }

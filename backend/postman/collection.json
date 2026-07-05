@@ -11,13 +11,12 @@
     { "name": "Income List", "request": { "method": "GET", "url": "{{baseUrl}}/api/income" } },
     { "name": "Create Income", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"source_name\":\"Salary\",\"amount\":92000,\"income_type\":\"Salary\"}" }, "url": "{{baseUrl}}/api/income" } },
     { "name": "Expenses List", "request": { "method": "GET", "url": "{{baseUrl}}/api/expenses" } },
+    { "name": "Create Expense", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"expense_name\":\"Lunch\",\"category\":\"Food\",\"amount\":180,\"status\":\"Paid\"}" }, "url": "{{baseUrl}}/api/expenses" } },
+    { "name": "Monthly Plans", "request": { "method": "GET", "url": "{{baseUrl}}/api/monthly-plans" } },
     { "name": "Loans List", "request": { "method": "GET", "url": "{{baseUrl}}/api/loans" } },
-    { "name": "AI Advice", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"question\":\"Which loan should I close first?\"}" }, "url": "{{baseUrl}}/api/ai/advice" } },
-    { "name": "Reports Summary", "request": { "method": "GET", "url": "{{baseUrl}}/api/reports/summary" } },
-    { "name": "OCR Mock Upload", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"fileName\":\"statement-july.pdf\"}" }, "url": "{{baseUrl}}/api/ocr/upload" } },
-    { "name": "Voice Process", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"command\":\"Add ₹500 petrol expense\"}" }, "url": "{{baseUrl}}/api/voice/process" } },
-    { "name": "AI Tax Planner", "request": { "method": "POST", "url": "{{baseUrl}}/api/ai-planners/tax" } },
-    { "name": "AI Investment Planner", "request": { "method": "POST", "url": "{{baseUrl}}/api/ai-planners/investments" } },
-    { "name": "Offline Sync Queue", "request": { "method": "GET", "url": "{{baseUrl}}/api/sync/queue" } }
+    { "name": "EMI List", "request": { "method": "GET", "url": "{{baseUrl}}/api/emis" } },
+    { "name": "Savings List", "request": { "method": "GET", "url": "{{baseUrl}}/api/goals" } },
+    { "name": "Purchase Planner List", "request": { "method": "GET", "url": "{{baseUrl}}/api/wishlist" } },
+    { "name": "Reports Summary", "request": { "method": "GET", "url": "{{baseUrl}}/api/reports/summary" } }
   ]
 }

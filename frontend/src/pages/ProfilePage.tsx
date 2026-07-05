@@ -14,12 +14,9 @@ const profileSchema = z.object({
   fullName: z.string().min(2),
   email: z.string().email(),
   phone: z.string().optional(),
-  currency: z.enum(['INR', 'USD', 'EUR', 'GBP', 'AED']),
   monthlySalary: z.number().min(0),
   defaultBudget: z.number().min(0),
   financialGoal: z.string().optional(),
-  notificationPreferences: z.string().optional(),
-  familyMembers: z.string().optional(),
 })
 
 const passwordSchema = z.object({
@@ -49,12 +46,9 @@ export function ProfilePage() {
       fullName: user?.fullName ?? user?.name ?? 'Diptish Gohane',
       email: user?.email ?? 'diptish@example.com',
       phone: '',
-      currency: 'INR',
       monthlySalary: 92000,
       defaultBudget: 50000,
       financialGoal: 'Become debt free and build wealth',
-      notificationPreferences: 'EMI, rent, insurance, savings',
-      familyMembers: 'Mummy, Tanu',
     },
   })
   const passwordForm = useForm<PasswordValues>({ resolver: zodResolver(passwordSchema) })
@@ -87,7 +81,7 @@ export function ProfilePage() {
 
   return (
     <div>
-      <PageHeader title="User Profile" subtitle="Edit profile, upload photo, update preferences, and change password." icon={UserRound} />
+      <PageHeader title="User Profile" subtitle="Edit your basic account details and change password." icon={UserRound} />
       <div className="grid gap-5 xl:grid-cols-[1fr_420px]">
         <GlassCard className="p-5">
           <div className="mb-6 flex items-center gap-4">
@@ -101,14 +95,9 @@ export function ProfilePage() {
             <input {...profileForm.register('fullName')} placeholder="Full name" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
             <input {...profileForm.register('email')} placeholder="Email" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
             <input {...profileForm.register('phone')} placeholder="Phone number" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
-            <select {...profileForm.register('currency')} className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]">
-              {['INR', 'USD', 'EUR', 'GBP', 'AED'].map((code) => <option key={code}>{code}</option>)}
-            </select>
             <input {...profileForm.register('monthlySalary', { valueAsNumber: true })} type="number" placeholder="Monthly salary" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
             <input {...profileForm.register('defaultBudget', { valueAsNumber: true })} type="number" placeholder="Default budget" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
             <textarea {...profileForm.register('financialGoal')} placeholder="Financial goal" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F] md:col-span-2" />
-            <input {...profileForm.register('notificationPreferences')} placeholder="Notification preferences" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
-            <input {...profileForm.register('familyMembers')} placeholder="Family members" className="rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm outline-none focus:border-[#2A9D8F]" />
             <button disabled={saving} className="flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[#111827] px-4 py-3 font-semibold text-white md:col-span-2">
               {saving && <Loader2 className="animate-spin" size={18} />}
               Save profile

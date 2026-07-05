@@ -5,6 +5,7 @@ export type AuthUser = {
   email: string
   fullName?: string
   name?: string
+  phone?: string
 }
 
 export type AuthSession = {
@@ -19,6 +20,16 @@ export type AuthPayload = {
 
 export async function login(email: string, password: string) {
   const { data } = await api.post<AuthPayload>('/auth/login', { email, password })
+  return data
+}
+
+export async function requestLoginOtp(phone: string) {
+  const { data } = await api.post<{ ok: boolean; message?: string; phone: string }>('/auth/request-otp', { phone })
+  return data
+}
+
+export async function verifyLoginOtp(phone: string, otp: string) {
+  const { data } = await api.post<AuthPayload>('/auth/verify-otp', { phone, otp })
   return data
 }
 

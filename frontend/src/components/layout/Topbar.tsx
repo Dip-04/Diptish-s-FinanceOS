@@ -9,7 +9,6 @@ import { useToastStore } from '../../store/useToastStore'
 export function Topbar() {
   const navigate = useNavigate()
   const setSidebarOpen = useFinanceStore((state) => state.setSidebarOpen)
-  const syncStatus = useFinanceStore((state) => state.syncStatus)
   const user = useAuthStore((state) => state.user)
   const clearAuth = useAuthStore((state) => state.clearAuth)
   const showToast = useToastStore((state) => state.showToast)
@@ -34,11 +33,8 @@ export function Topbar() {
         </button>
         <div className="hidden flex-1 items-center gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-500 md:flex">
           <Search size={18} />
-          <span className="text-sm">Search transactions, loans, goals...</span>
+          <span className="text-sm">Search income, expenses, loans, and payments...</span>
         </div>
-        <span className={`rounded-full border bg-white px-3 py-2 text-xs font-semibold md:hidden ${syncStatus === 'online' ? 'border-[#16A34A]/25 text-[#16A34A]' : 'border-[#F59E0B]/25 text-[#F59E0B]'}`}>
-          {syncStatus === 'online' ? 'Online' : 'Offline'}
-        </span>
         <button className="ml-auto rounded-2xl border border-gray-200 bg-white p-3 text-gray-600 hover:bg-[#F9FAFB]" aria-label="Notifications">
           <Bell size={18} />
         </button>

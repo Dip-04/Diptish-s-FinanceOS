@@ -74,7 +74,7 @@ export function AuthPage({ mode }: { mode: 'login' | 'register' | 'forgot' | 're
           <h1 className="mt-16 max-w-xl text-6xl font-semibold tracking-normal text-[#111827]">A calm command center for your money.</h1>
         </div>
         <div className="grid max-w-2xl grid-cols-2 gap-4">
-          {['Debt pressure -32%', 'Savings runway 4.2 mo', 'Slice payoff Sep', 'AI coach ready'].map((item, index) => (
+          {['Expenses tracked', 'Savings planned', 'Slice payoff Sep', 'Balance visible'].map((item, index) => (
             <div key={item} className="rounded-3xl border border-gray-100 bg-white p-5 shadow-sm" style={{ transform: `translateY(${index % 2 ? 20 : 0}px)` }}>
               <p className="text-sm text-gray-500">{item.split(' ')[0]}</p>
               <strong className="mt-2 block text-2xl text-[#111827]">{item.replace(item.split(' ')[0], '')}</strong>

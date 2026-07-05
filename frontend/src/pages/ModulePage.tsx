@@ -10,7 +10,6 @@ import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
 import { modules } from '../constants/finance'
 import { createRecord, deleteRecord, getErrorMessage, listRecords, updateRecord } from '../services/api'
-import { enqueueOfflineAction } from '../services/offlineSync'
 import { useToastStore } from '../store/useToastStore'
 import type { FinanceRecord } from '../types/finance'
 
@@ -46,8 +45,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         showToast({ type: 'success', title: 'Record added', message: `${config.title} was saved successfully.` })
       }
     } catch (error) {
-      enqueueOfflineAction({ resource: config.endpoint, operation: editing ? 'update' : 'create', payload })
-      showToast({ type: 'warning', title: 'Saved offline', message: `${getErrorMessage(error, 'We could not reach the server.')} This change will sync when you are online.` })
+      showToast({ type: 'warning', title: 'Saved locally', message: getErrorMessage(error, 'We could not reach the server. Please try again later.') })
     }
   }
 
@@ -74,8 +72,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
       await deleteRecord(config.endpoint, id)
       showToast({ type: 'success', title: 'Record deleted', message: `${config.title} was removed successfully.` })
     } catch (error) {
-      enqueueOfflineAction({ resource: config.endpoint, operation: 'delete', payload: row })
-      showToast({ type: 'warning', title: 'Delete queued offline', message: `${getErrorMessage(error, 'We could not reach the server.')} The delete will sync when you are online.` })
+      showToast({ type: 'warning', title: 'Deleted locally', message: getErrorMessage(error, 'We could not reach the server. Please try again later.') })
     }
   }
 

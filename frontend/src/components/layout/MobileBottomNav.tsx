@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import { Bot, Gauge, Plus, ReceiptText, Target, WalletCards } from 'lucide-react'
+import { Banknote, CalendarDays, Gauge, Plus, ReceiptText, Target } from 'lucide-react'
 
 const mobileItems = [
   { label: 'Home', path: '/', icon: Gauge },
   { label: 'Spend', path: '/expenses', icon: ReceiptText },
-  { label: 'Add', path: '/voice-entry', icon: Plus, primary: true },
-  { label: 'Goals', path: '/goals', icon: Target },
-  { label: 'AI', path: '/ai-advisor', icon: Bot },
+  { label: 'Add', path: '/daily-expenses', icon: Plus, primary: true },
+  { label: 'Plan', path: '/monthly-planner', icon: CalendarDays },
+  { label: 'Save', path: '/savings', icon: Target },
 ]
 
 export function MobileBottomNav() {
@@ -24,8 +24,8 @@ export function MobileBottomNav() {
 
 export function FloatingActionButton() {
   return (
-    <NavLink to="/voice-entry" className="fixed right-4 z-30 grid h-14 w-14 place-items-center rounded-full bg-[#111827] text-white shadow-[0_16px_34px_rgba(17,24,39,0.22)] lg:hidden" style={{ bottom: 'calc(max(0.75rem, env(safe-area-inset-bottom)) + 5.4rem)' }} aria-label="Quick add">
-      <WalletCards size={24} />
+    <NavLink to="/income" className="fixed right-4 z-30 grid h-14 w-14 place-items-center rounded-full bg-[#111827] text-white shadow-[0_16px_34px_rgba(17,24,39,0.22)] lg:hidden" style={{ bottom: 'calc(max(0.75rem, env(safe-area-inset-bottom)) + 5.4rem)' }} aria-label="Add income">
+      <Banknote size={24} />
     </NavLink>
   )
 }

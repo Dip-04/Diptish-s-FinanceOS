@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { FloatingActionButton, MobileBottomNav } from './MobileBottomNav'
 import { Sidebar } from './Sidebar'
-import { SyncStatus } from './SyncStatus'
 import { Topbar } from './Topbar'
 
 export function AppLayout() {
@@ -14,7 +13,6 @@ export function AppLayout() {
           <Outlet />
         </div>
       </main>
-      <SyncStatus />
       <FloatingActionButton />
       <MobileBottomNav />
     </div>

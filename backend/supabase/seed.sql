@@ -5,7 +5,7 @@ insert into public.expenses (expense_name, category, amount, month, year, due_da
 values
   ('Rent', 'Rent', 11000, 7, 2026, '2026-07-05', 'Paid', 'Critical'),
   ('Bike EMI', 'EMI', 5000, 7, 2026, '2026-07-10', 'Paid', 'High'),
-  ('Tanu', 'Family', 35000, 7, 2026, '2026-07-12', 'Planned', 'High'),
+  ('Home support', 'Bills', 35000, 7, 2026, '2026-07-12', 'Planned', 'High'),
   ('Slice', 'Loan', 29000, 7, 2026, '2026-07-15', 'Planned', 'Critical'),
   ('Monthly expenses', 'Food', 10000, 7, 2026, '2026-07-20', 'Planned', 'Medium'),
   ('Petrol', 'Petrol', 2000, 7, 2026, '2026-07-21', 'Planned', 'Medium'),

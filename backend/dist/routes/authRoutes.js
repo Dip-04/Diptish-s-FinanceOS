@@ -27,12 +27,9 @@ authRoutes.post('/login', asyncHandler(async (req, res) => {
             ...data.user,
             fullName: profile?.full_name ?? data.user.user_metadata?.full_name,
             phone: profile?.phone ?? data.user.phone,
-            currency: profile?.currency_preference,
             monthlySalary: profile?.monthly_salary,
             defaultBudget: profile?.default_budget,
             financialGoal: profile?.financial_goal,
-            notificationPreferences: profile?.notification_preferences,
-            familyMembers: profile?.family_members,
         } : data.user,
     });
 }));
@@ -67,12 +64,9 @@ authRoutes.put('/profile', asyncHandler(async (req, res) => {
         fullName: z.string().optional(),
         email: z.string().email().optional(),
         phone: z.string().optional(),
-        currency: z.string().optional(),
         monthlySalary: z.number().optional(),
         defaultBudget: z.number().optional(),
         financialGoal: z.string().optional(),
-        notificationPreferences: z.string().optional(),
-        familyMembers: z.string().optional(),
     });
     const payload = profileSchema.parse(req.body);
     if (!supabase || !payload.id)
@@ -82,12 +76,9 @@ authRoutes.put('/profile', asyncHandler(async (req, res) => {
         full_name: payload.fullName,
         email: payload.email,
         phone: payload.phone,
-        currency_preference: payload.currency,
         monthly_salary: payload.monthlySalary,
         default_budget: payload.defaultBudget,
         financial_goal: payload.financialGoal,
-        notification_preferences: payload.notificationPreferences,
-        family_members: payload.familyMembers,
         updated_at: new Date().toISOString(),
     }).select('*').single();
     if (error)
@@ -97,12 +88,9 @@ authRoutes.put('/profile', asyncHandler(async (req, res) => {
         fullName: data.full_name,
         email: data.email,
         phone: data.phone,
-        currency: data.currency_preference,
         monthlySalary: data.monthly_salary,
         defaultBudget: data.default_budget,
         financialGoal: data.financial_goal,
-        notificationPreferences: data.notification_preferences,
-        familyMembers: data.family_members,
     });
 }));
 authRoutes.post('/change-password', asyncHandler(async (req, res) => {
