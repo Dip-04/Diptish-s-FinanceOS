@@ -54,14 +54,47 @@ function table(name: ResourceName) {
   return rows
 }
 
+function shouldFallbackToMemory(error: unknown) {
+  if (!error || typeof error !== 'object') return false
+
+  const details = [
+    'message' in error ? error.message : '',
+    'details' in error ? error.details : '',
+    'hint' in error ? error.hint : '',
+    'code' in error ? error.code : '',
+    'cause' in error && error.cause && typeof error.cause === 'object' && 'message' in error.cause ? error.cause.message : '',
+  ]
+    .filter((value): value is string => typeof value === 'string')
+    .join(' ')
+    .toLowerCase()
+
+  return ['enotfound', 'getaddrinfo', 'fetch failed', 'failed to fetch', 'eai_again'].some((token) => details.includes(token))
+}
+
+async function withSupabaseFallback<T>(action: () => Promise<T>, fallback: () => T | Promise<T>) {
+  try {
+    return await action()
+  } catch (error) {
+    if (!shouldFallbackToMemory(error)) throw error
+    console.warn('Supabase unreachable, using local memory mode:', error)
+    return fallback()
+  }
+}
+
 export class ResourceService {
   constructor(private readonly resource: ResourceName) {}
 
   async list() {
     if (supabase) {
-      const { data, error } = await supabase.from(this.resource).select('*').order('created_at', { ascending: false })
-      if (error) throw error
-      return data ?? []
+      const client = supabase
+      return withSupabaseFallback(
+        async () => {
+          const { data, error } = await client.from(this.resource).select('*').order('created_at', { ascending: false })
+          if (error) throw error
+          return data ?? []
+        },
+        () => table(this.resource),
+      )
     }
     return table(this.resource)
   }
@@ -70,9 +103,18 @@ export class ResourceService {
     const now = new Date().toISOString()
     const record = { id: payload.id ?? randomUUID(), ...normalizePayload(this.resource, payload), created_at: now, updated_at: now }
     if (supabase) {
-      const { data, error } = await supabase.from(this.resource).insert(record).select('*').single()
-      if (error) throw error
-      return data
+      const client = supabase
+      return withSupabaseFallback(
+        async () => {
+          const { data, error } = await client.from(this.resource).insert(record).select('*').single()
+          if (error) throw error
+          return data
+        },
+        () => {
+          table(this.resource).unshift(record)
+          return record
+        },
+      )
     }
     table(this.resource).unshift(record)
     return record
@@ -81,9 +123,21 @@ export class ResourceService {
   async update(id: string, payload: FinanceRecord) {
     const updates = { ...normalizePayload(this.resource, payload), updated_at: new Date().toISOString() }
     if (supabase) {
-      const { data, error } = await supabase.from(this.resource).update(updates).eq('id', id).select('*').single()
-      if (error) throw error
-      return data
+      const client = supabase
+      return withSupabaseFallback(
+        async () => {
+          const { data, error } = await client.from(this.resource).update(updates).eq('id', id).select('*').single()
+          if (error) throw error
+          return data
+        },
+        () => {
+          const rows = table(this.resource)
+          const index = rows.findIndex((row) => row.id === id)
+          if (index === -1) throw new Error('Record not found')
+          rows[index] = { ...rows[index], ...updates }
+          return rows[index]
+        },
+      )
     }
     const rows = table(this.resource)
     const index = rows.findIndex((row) => row.id === id)
@@ -94,9 +148,18 @@ export class ResourceService {
 
   async remove(id: string) {
     if (supabase) {
-      const { error } = await supabase.from(this.resource).delete().eq('id', id)
-      if (error) throw error
-      return { id }
+      const client = supabase
+      return withSupabaseFallback(
+        async () => {
+          const { error } = await client.from(this.resource).delete().eq('id', id)
+          if (error) throw error
+          return { id }
+        },
+        () => {
+          memoryDb.set(this.resource, table(this.resource).filter((row) => row.id !== id))
+          return { id }
+        },
+      )
     }
     memoryDb.set(this.resource, table(this.resource).filter((row) => row.id !== id))
     return { id }

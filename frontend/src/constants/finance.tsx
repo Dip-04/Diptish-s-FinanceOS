@@ -68,8 +68,8 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     ],
     columns: [{ key: 'expense_name', header: 'Expense' }, { key: 'category', header: 'Category' }, amountColumn, statusColumn],
     seed: [
-      { id: 'mexp-1', expense_name: 'Rent', category: 'Rent', amount: 11000, due_date: '2026-07-05', status: 'Paid' },
-      { id: 'mexp-2', expense_name: 'Groceries', category: 'Groceries', amount: 8000, due_date: '2026-07-08', status: 'Planned' },
+      { id: 'mexp-1', expense_name: 'Rent', category: 'Rent', amount: 11000, due_date: '2026-07-05', status: 'Paid', recurring: true },
+      { id: 'mexp-2', expense_name: 'Groceries', category: 'Groceries', amount: 8000, due_date: '2026-07-08', status: 'Planned', recurring: true },
     ],
   },
   'daily-expenses': {
@@ -88,8 +88,8 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     ],
     columns: [{ key: 'expense_name', header: 'Spent on' }, { key: 'category', header: 'Category' }, amountColumn, { key: 'due_date', header: 'Date' }],
     seed: [
-      { id: 'dexp-1', expense_name: 'Lunch', category: 'Food', amount: 180, due_date: '2026-07-05', status: 'Paid' },
-      { id: 'dexp-2', expense_name: 'Petrol', category: 'Petrol', amount: 500, due_date: '2026-07-05', status: 'Paid' },
+      { id: 'dexp-1', expense_name: 'Lunch', category: 'Food', amount: 180, due_date: '2026-07-05', status: 'Paid', recurring: false },
+      { id: 'dexp-2', expense_name: 'Petrol', category: 'Petrol', amount: 500, due_date: '2026-07-05', status: 'Paid', recurring: false },
     ],
   },
   expenses: {
@@ -108,9 +108,9 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
     ],
     columns: [{ key: 'expense_name', header: 'Expense' }, { key: 'category', header: 'Category' }, amountColumn, statusColumn],
     seed: [
-      { id: 'exp-1', expense_name: 'Rent', category: 'Rent', amount: 11000, due_date: '2026-07-05', status: 'Paid' },
-      { id: 'exp-2', expense_name: 'Slice payment', category: 'Loan', amount: 29000, due_date: '2026-07-12', status: 'Planned' },
-      { id: 'exp-3', expense_name: 'Lunch', category: 'Food', amount: 180, due_date: '2026-07-05', status: 'Paid' },
+      { id: 'exp-1', expense_name: 'Rent', category: 'Rent', amount: 11000, due_date: '2026-07-05', status: 'Paid', recurring: true },
+      { id: 'exp-2', expense_name: 'Slice payment', category: 'Loan', amount: 29000, due_date: '2026-07-12', status: 'Planned', recurring: true },
+      { id: 'exp-3', expense_name: 'Lunch', category: 'Food', amount: 180, due_date: '2026-07-05', status: 'Paid', recurring: false },
     ],
   },
   loans: {

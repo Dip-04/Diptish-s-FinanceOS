@@ -13,11 +13,59 @@ import { createRecord, deleteRecord, getErrorMessage, listRecords, updateRecord 
 import { useToastStore } from '../store/useToastStore'
 import type { FinanceRecord } from '../types/finance'
 
+const dailyExpenseCategories = new Set(['food', 'travel', 'petrol', 'shopping', 'tea/snacks', 'entertainment'])
+const monthlyExpenseCategories = new Set(['rent', 'bills', 'groceries', 'subscription', 'medical', 'education', 'emi', 'loan', 'savings'])
+const filterableModules = new Set(['income', 'monthly-expenses', 'daily-expenses', 'expenses', 'emis', 'purchases'])
+const expenseLikeModules = new Set(['monthly-expenses', 'daily-expenses', 'expenses', 'emis', 'purchases'])
+
+function getDateValue(row: FinanceRecord) {
+  const value = row.due_date ?? row.received_date ?? row.deadline ?? null
+  return typeof value === 'string' ? value : null
+}
+
+function getExpenseScope(row: FinanceRecord) {
+  if (typeof row.recurring === 'boolean') return row.recurring ? 'monthly' : 'daily'
+
+  const category = String(row.category ?? '').trim().toLowerCase()
+  if (dailyExpenseCategories.has(category)) return 'daily'
+  if (monthlyExpenseCategories.has(category)) return 'monthly'
+
+  return Number(row.amount ?? 0) >= 2000 ? 'monthly' : 'daily'
+}
+
+function matchesDateFilter(row: FinanceRecord, dateFilter: string) {
+  if (dateFilter === 'all') return true
+
+  const rawDate = getDateValue(row)
+  if (!rawDate) return false
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const itemDate = new Date(rawDate)
+  itemDate.setHours(0, 0, 0, 0)
+
+  return dateFilter === 'future' ? itemDate >= today : itemDate < today
+}
+
+function matchesStatusFilter(row: FinanceRecord, statusFilter: string) {
+  if (statusFilter === 'all') return true
+
+  const status = String(row.status ?? '').trim().toLowerCase()
+  if (statusFilter === 'paid') return status === 'paid' || status === 'completed'
+  if (statusFilter === 'pending') return ['planned', 'unpaid', 'overdue', 'active'].includes(status)
+  return true
+}
+
 export function ModulePage({ id }: { id: keyof typeof modules }) {
   const config = modules[id]
+  const defaultStatus = config.fields.find((field) => field.name === 'status')?.options?.[0] ?? 'Active'
   const [rows, setRows] = useState<FinanceRecord[]>(config.seed)
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<FinanceRecord | null>(null)
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [dateFilter, setDateFilter] = useState('all')
+  const [typeFilter, setTypeFilter] = useState('all')
   const showToast = useToastStore((state) => state.showToast)
   const { register, handleSubmit, reset } = useForm<FinanceRecord>()
 
@@ -25,13 +73,39 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
     void listRecords(config.endpoint, config.seed).then(setRows)
   }, [config.endpoint, config.seed])
 
+  useEffect(() => {
+    setStatusFilter('all')
+    setDateFilter('all')
+    setTypeFilter('all')
+  }, [id])
+
+  const filteredRows = useMemo(() => {
+    return rows.filter((row) => {
+      if (id === 'monthly-expenses' && getExpenseScope(row) !== 'monthly') return false
+      if (id === 'daily-expenses' && getExpenseScope(row) !== 'daily') return false
+
+      if (id === 'expenses' && typeFilter !== 'all' && getExpenseScope(row) !== typeFilter) return false
+
+      if (id === 'income') {
+        const incomeType = String(row.income_type ?? '').trim().toLowerCase()
+        if (typeFilter === 'salary' && incomeType !== 'salary') return false
+        if (typeFilter === 'other' && incomeType === 'salary') return false
+      }
+
+      if (expenseLikeModules.has(id) && !matchesStatusFilter(row, statusFilter)) return false
+
+      return matchesDateFilter(row, dateFilter)
+    })
+  }, [dateFilter, id, rows, statusFilter, typeFilter])
+
   const metrics = useMemo(() => {
-    const total = rows.reduce((sum, row) => sum + Number(row.amount ?? row.outstanding_amount ?? row.total_loan_amount ?? 0), 0)
-    return { total, count: rows.length }
-  }, [rows])
+    const total = filteredRows.reduce((sum, row) => sum + Number(row.amount ?? row.outstanding_amount ?? row.total_loan_amount ?? 0), 0)
+    return { total, count: filteredRows.length }
+  }, [filteredRows])
 
   async function onSubmit(values: FinanceRecord) {
-    const payload = { id: editing?.id ?? crypto.randomUUID(), status: editing?.status ?? 'Active', ...values }
+    const normalizedExpenseScope = id === 'monthly-expenses' ? { recurring: true } : id === 'daily-expenses' ? { recurring: false } : {}
+    const payload = { id: editing?.id ?? crypto.randomUUID(), status: editing?.status ?? defaultStatus, ...editing, ...values, ...normalizedExpenseScope }
     setRows((current) => editing ? current.map((row) => row.id === editing.id ? payload : row) : [payload, ...current])
     setOpen(false)
     setEditing(null)
@@ -62,14 +136,14 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   }
 
   async function removeRow(row: FinanceRecord) {
-    const id = String(row.id ?? '')
-    if (!id) {
+    const entryId = String(row.id ?? '')
+    if (!entryId) {
       showToast({ type: 'error', title: 'Delete failed', message: 'This record does not have a valid ID.' })
       return
     }
     setRows((current) => current.filter((item) => item.id !== row.id))
     try {
-      await deleteRecord(config.endpoint, id)
+      await deleteRecord(config.endpoint, entryId)
       showToast({ type: 'success', title: 'Record deleted', message: `${config.title} was removed successfully.` })
     } catch (error) {
       showToast({ type: 'warning', title: 'Deleted locally', message: getErrorMessage(error, 'We could not reach the server. Please try again later.') })
@@ -100,15 +174,48 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
       <div className="mb-5 grid gap-4 md:grid-cols-2">
         <GlassCard className="p-5">
           <p className="text-sm text-gray-500">Total tracked</p>
-          <strong className="mt-2 block text-3xl font-semibold text-[#111827]">₹{metrics.total.toLocaleString('en-IN')}</strong>
+          <strong className="mt-2 block text-3xl font-semibold text-[#111827]">Rs {metrics.total.toLocaleString('en-IN')}</strong>
         </GlassCard>
         <GlassCard className="p-5">
           <p className="text-sm text-gray-500">Records</p>
           <strong className="mt-2 block text-3xl font-semibold text-[#111827]">{metrics.count}</strong>
         </GlassCard>
       </div>
+      {filterableModules.has(id) && (
+        <GlassCard className="mb-5 grid gap-3 p-4 md:grid-cols-3">
+          {id === 'income' ? (
+            <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">
+              <option value="all">All income</option>
+              <option value="salary">Salary</option>
+              <option value="other">Other income</option>
+            </select>
+          ) : (
+            <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">
+              <option value="all">All status</option>
+              <option value="pending">Pending</option>
+              <option value="paid">Paid</option>
+            </select>
+          )}
+          <select value={dateFilter} onChange={(event) => setDateFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">
+            <option value="all">All dates</option>
+            <option value="future">Future</option>
+            <option value="past">Past</option>
+          </select>
+          {id === 'expenses' ? (
+            <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">
+              <option value="all">All expenses</option>
+              <option value="monthly">Monthly</option>
+              <option value="daily">Daily</option>
+            </select>
+          ) : (
+            <div className="flex items-center rounded-2xl border border-dashed border-gray-200 px-4 py-3 text-sm text-gray-500">
+              {id === 'income' ? 'Filter salary and past or future income here.' : 'Filter pending or paid items with past or future dates here.'}
+            </div>
+          )}
+        </GlassCard>
+      )}
       <GlassCard className="p-4">
-        {rows.length ? <><MobileCardList rows={rows} columns={config.columns} renderActions={rowActions} /><DataTable rows={rows} columns={config.columns} renderActions={rowActions} /></> : <EmptyState />}
+        {filteredRows.length ? <><MobileCardList rows={filteredRows} columns={config.columns} renderActions={rowActions} /><DataTable rows={filteredRows} columns={config.columns} renderActions={rowActions} /></> : <EmptyState />}
       </GlassCard>
       <Modal title={`${editing ? 'Edit' : 'Add'} ${config.title}`} open={open} onClose={() => { setOpen(false); setEditing(null); reset({}) }}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 md:grid-cols-2">
