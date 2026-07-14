@@ -53,6 +53,7 @@ function matchesStatusFilter(row: FinanceRecord, statusFilter: string) {
 
   const status = String(row.status ?? '').trim().toLowerCase()
   if (statusFilter === 'paid') return status === 'paid' || status === 'completed'
+  if (statusFilter === 'overdue') return status === 'overdue'
   if (statusFilter === 'pending') return ['planned', 'unpaid', 'overdue', 'active'].includes(status)
   return true
 }
@@ -188,6 +189,12 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
               <option value="all">All income</option>
               <option value="salary">Salary</option>
               <option value="other">Other income</option>
+            </select>
+          ) : id === 'emis' ? (
+            <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">
+              <option value="all">All EMI</option>
+              <option value="paid">Paid EMI</option>
+              <option value="overdue">Overdue EMI</option>
             </select>
           ) : (
             <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)} className="w-full rounded-2xl border border-gray-200 bg-[#F9FAFB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#2A9D8F]">

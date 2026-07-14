@@ -135,7 +135,26 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
       { id: 'loan-2', loan_name: 'Bike Loan', lender_name: 'HDFC', loan_type: 'Bike Loan', total_loan_amount: 90000, emi_amount: 5000, outstanding_amount: 45000, status: 'Active' },
     ],
   },
-  emis: makeSimpleModule('EMI Tracker', '/emis', WalletCards, 'from-[#E9C46A] to-[#E76F51]', 'Track upcoming, paid, and missed EMI payments.', 'emi_name', 'Slice EMI'),
+  emis: {
+    title: 'EMI Tracker',
+    subtitle: 'Track upcoming, paid, and overdue EMI payments.',
+    endpoint: '/emis',
+    icon: WalletCards,
+    accent: 'from-[#E9C46A] to-[#E76F51]',
+    fields: [
+      { name: 'emi_name', label: 'EMI Tracker' },
+      { name: 'amount', label: 'Amount', type: 'number' },
+      { name: 'due_date', label: 'Date', type: 'date' },
+      { name: 'status', label: 'Status', type: 'select', options: ['Upcoming', 'Paid', 'Overdue'] },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
+    ],
+    columns: [{ key: 'emi_name', header: 'Name' }, amountColumn, { key: 'due_date', header: 'Date' }, statusColumn],
+    seed: [
+      { id: 'emis-1', emi_name: 'Slice EMI', amount: 18000, due_date: '2026-09-30', status: 'Upcoming' },
+      { id: 'emis-2', emi_name: 'Bike EMI', amount: 5000, due_date: '2026-07-05', status: 'Paid' },
+      { id: 'emis-3', emi_name: 'Phone EMI', amount: 3200, due_date: '2026-07-01', status: 'Overdue' },
+    ],
+  },
   savings: makeSimpleModule('Savings', '/goals', PiggyBank, 'from-[#2A9D8F] to-[#111827]', 'See current savings and plan small savings targets.', 'goal_name', 'Emergency fund'),
   purchases: makeSimpleModule('Purchase Planner', '/wishlist', Target, 'from-[#111827] to-[#2A9D8F]', 'Plan upcoming purchases and the monthly saving needed for each item.', 'item_name', 'New phone'),
 }
