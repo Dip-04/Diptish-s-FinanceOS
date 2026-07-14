@@ -201,13 +201,22 @@ reportRoutes.get('/planner', asyncHandler(async (_req, res) => {
             status: String(row.status ?? 'Planned'),
         });
     }
-    res.json(sortBuckets([...buckets.values()])
-        .reverse()
-        .map((bucket) => ({
-        month: bucket.month,
-        income: bucket.income,
-        expenses: bucket.expenses,
-        remaining: bucket.income - bucket.expenses,
-        items: bucket.items.sort((a, b) => b.amount - a.amount),
-    })));
+    const ordered = sortBuckets([...buckets.values()]);
+    let carryForward = 0;
+    const planner = ordered.map((bucket) => {
+        const availableIncome = bucket.income + carryForward;
+        const remaining = availableIncome - bucket.expenses;
+        const response = {
+            month: bucket.month,
+            income: bucket.income,
+            carryForward,
+            availableIncome,
+            expenses: bucket.expenses,
+            remaining,
+            items: bucket.items.sort((a, b) => b.amount - a.amount),
+        };
+        carryForward = remaining;
+        return response;
+    });
+    res.json(planner.reverse());
 }));

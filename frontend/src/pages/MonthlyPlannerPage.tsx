@@ -53,7 +53,11 @@ export function MonthlyPlannerPage() {
                 <h2 className="text-xl font-semibold text-[#111827]">{plan.month}</h2>
                 {plan.remaining < 0 ? <AlertTriangle className="text-rose-300" /> : <CheckCircle2 className="text-emerald-300" />}
               </div>
-              <p className="mt-2 text-sm text-gray-500">Income {currency(plan.income)}</p>
+              <div className="mt-2 space-y-1 text-sm text-gray-500">
+                <p>Month income {currency(plan.income)}</p>
+                <p>Past month balance added {currency(plan.carryForward ?? 0)}</p>
+                <p className="font-medium text-[#111827]">Available income {currency(plan.availableIncome ?? plan.income)}</p>
+              </div>
               <div className="mt-5 space-y-3">
                 {plan.items.map((item) => (
                   <div key={`${plan.month}-${item.name}-${item.amount}`} className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">

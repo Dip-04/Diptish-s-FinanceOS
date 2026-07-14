@@ -90,8 +90,16 @@ export function DashboardPage() {
               <h2 className="mt-2 text-2xl font-semibold text-[#111827]">{currentPlan?.month ?? 'No month data yet'}</h2>
               <div className="mt-5 space-y-3">
                 <div className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">
-                  <span className="text-gray-600">Income</span>
+                  <span className="text-gray-600">Month income</span>
                   <strong className="text-[#111827]">{currency(currentPlan?.income ?? 0)}</strong>
+                </div>
+                <div className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">
+                  <span className="text-gray-600">Past balance added</span>
+                  <strong className="text-[#111827]">{currency(currentPlan?.carryForward ?? 0)}</strong>
+                </div>
+                <div className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">
+                  <span className="text-gray-600">Available income</span>
+                  <strong className="text-[#111827]">{currency(currentPlan?.availableIncome ?? currentPlan?.income ?? 0)}</strong>
                 </div>
                 <div className="flex items-center justify-between rounded-2xl bg-[#F9FAFB] px-4 py-3 text-sm">
                   <span className="text-gray-600">Planned payments</span>
