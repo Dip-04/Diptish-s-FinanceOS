@@ -43,13 +43,14 @@ export const modules: Record<string, ModuleConfig<FinanceRecord>> = {
       { name: 'amount', label: 'Amount', type: 'number' },
       { name: 'received_date', label: 'Received date', type: 'date' },
       { name: 'income_type', label: 'Type', type: 'select', options: ['Salary', 'Freelance', 'Refund', 'Interest', 'Gift', 'Other'] },
+      { name: 'status', label: 'Status', type: 'select', options: ['Paid', 'Overdue'] },
       { name: 'recurring', label: 'Monthly recurring', type: 'checkbox' },
       { name: 'notes', label: 'Notes', type: 'textarea' },
     ],
-    columns: [{ key: 'source_name', header: 'Source' }, amountColumn, { key: 'income_type', header: 'Type' }, { key: 'received_date', header: 'Date' }],
+    columns: [{ key: 'source_name', header: 'Source' }, amountColumn, { key: 'income_type', header: 'Type' }, statusColumn, { key: 'received_date', header: 'Date' }],
     seed: [
-      { id: 'inc-1', source_name: 'Salary', amount: 92000, income_type: 'Salary', received_date: '2026-07-01', recurring: true },
-      { id: 'inc-2', source_name: 'Interest Credit', amount: 1400, income_type: 'Interest', received_date: '2026-07-03', recurring: false },
+      { id: 'inc-1', source_name: 'Salary', amount: 92000, income_type: 'Salary', status: 'Paid', received_date: '2026-07-01', recurring: true },
+      { id: 'inc-2', source_name: 'Interest Credit', amount: 1400, income_type: 'Interest', status: 'Overdue', received_date: '2026-07-03', recurring: false },
     ],
   },
   'monthly-expenses': {
