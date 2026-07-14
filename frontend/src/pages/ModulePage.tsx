@@ -19,6 +19,12 @@ const monthlyExpenseCategories = new Set(['rent', 'bills', 'groceries', 'subscri
 const filterableModules = new Set(['income', 'monthly-expenses', 'daily-expenses', 'expenses', 'emis', 'purchases'])
 const expenseLikeModules = new Set(['monthly-expenses', 'daily-expenses', 'expenses', 'emis', 'purchases'])
 
+function normalizeFormValues(values: FinanceRecord) {
+  return Object.fromEntries(
+    Object.entries(values).filter(([, value]) => value !== ''),
+  ) as FinanceRecord
+}
+
 function getDateValue(row: FinanceRecord) {
   const value = row.due_date ?? row.received_date ?? row.deadline ?? null
   return typeof value === 'string' ? value : null
@@ -128,8 +134,15 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   }, [filteredRows])
 
   async function onSubmit(values: FinanceRecord) {
+    const normalizedValues = normalizeFormValues(values)
     const normalizedExpenseScope = id === 'monthly-expenses' ? { recurring: true } : id === 'daily-expenses' ? { recurring: false } : {}
-    const payload = { id: editing?.id ?? crypto.randomUUID(), status: editing?.status ?? defaultStatus, ...editing, ...values, ...normalizedExpenseScope }
+    const payload = {
+      id: editing?.id ?? crypto.randomUUID(),
+      status: editing?.status ?? defaultStatus,
+      ...editing,
+      ...normalizedValues,
+      ...normalizedExpenseScope,
+    }
     setRows((current) => editing ? current.map((row) => row.id === editing.id ? payload : row) : [payload, ...current])
     setOpen(false)
     setEditing(null)

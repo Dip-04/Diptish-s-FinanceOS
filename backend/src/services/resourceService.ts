@@ -5,7 +5,7 @@ import type { FinanceRecord, ResourceName } from '../types/finance.js'
 const memoryDb = new Map<ResourceName, FinanceRecord[]>()
 
 const writableColumns: Record<ResourceName, readonly string[]> = {
-  income_sources: ['id', 'user_id', 'source_name', 'amount', 'received_date', 'month', 'year', 'income_type', 'recurring', 'taxable', 'notes', 'attachment_url'],
+  income_sources: ['id', 'user_id', 'source_name', 'amount', 'received_date', 'month', 'year', 'income_type', 'status', 'recurring', 'taxable', 'notes', 'attachment_url'],
   expenses: ['id', 'user_id', 'expense_name', 'category', 'amount', 'month', 'year', 'due_date', 'paid_date', 'status', 'priority', 'mandatory', 'recurring', 'payment_mode', 'notes'],
   monthly_plans: ['id', 'user_id', 'month', 'year', 'planned_income', 'actual_income'],
   loans: ['id', 'user_id', 'loan_name', 'lender_name', 'loan_type', 'total_loan_amount', 'principal_amount', 'interest_rate', 'processing_fee', 'emi_amount', 'emi_date', 'start_date', 'end_date', 'tenure_months', 'paid_amount', 'outstanding_amount', 'interest_paid', 'remaining_interest', 'prepayment_allowed', 'foreclosure_charges', 'status', 'notes'],

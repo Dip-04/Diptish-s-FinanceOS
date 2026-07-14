@@ -30,11 +30,15 @@ create table if not exists public.income_sources (
   month integer,
   year integer,
   income_type text,
+  status text default 'Paid',
   recurring boolean default false,
   notes text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.income_sources
+add column if not exists status text default 'Paid';
 
 create table if not exists public.expenses (
   id uuid primary key default gen_random_uuid(),
