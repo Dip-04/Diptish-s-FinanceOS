@@ -24,13 +24,9 @@ export function getErrorMessage(error: unknown, fallback = 'Something went wrong
   return fallback
 }
 
-export async function listRecords<T>(endpoint: string, fallback: T[]): Promise<T[]> {
-  try {
-    const { data } = await api.get<T[]>(endpoint)
-    return data
-  } catch {
-    return fallback
-  }
+export async function listRecords<T>(endpoint: string): Promise<T[]> {
+  const { data } = await api.get<T[]>(endpoint)
+  return data
 }
 
 export async function createRecord<T>(endpoint: string, payload: T): Promise<T> {

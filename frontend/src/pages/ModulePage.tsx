@@ -5,6 +5,7 @@ import { DataTable } from '../components/ui/DataTable'
 import { EmptyState } from '../components/ui/EmptyState'
 import { FormControl } from '../components/ui/FormControls'
 import { GlassCard } from '../components/ui/GlassCard'
+import { LoadingState } from '../components/ui/LoadingState'
 import { Modal } from '../components/ui/Modal'
 import { MobileCardList } from '../components/ui/MobileCardList'
 import { PageHeader } from '../components/ui/PageHeader'
@@ -61,9 +62,10 @@ function matchesStatusFilter(row: FinanceRecord, statusFilter: string) {
 export function ModulePage({ id }: { id: keyof typeof modules }) {
   const config = modules[id]
   const defaultStatus = config.fields.find((field) => field.name === 'status')?.options?.[0] ?? 'Active'
-  const [rows, setRows] = useState<FinanceRecord[]>(config.seed)
+  const [rows, setRows] = useState<FinanceRecord[]>([])
   const [open, setOpen] = useState(false)
   const [editing, setEditing] = useState<FinanceRecord | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState('all')
   const [dateFilter, setDateFilter] = useState('all')
   const [typeFilter, setTypeFilter] = useState('all')
@@ -71,8 +73,29 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
   const { register, handleSubmit, reset } = useForm<FinanceRecord>()
 
   useEffect(() => {
-    void listRecords(config.endpoint, config.seed).then(setRows)
-  }, [config.endpoint, config.seed])
+    let active = true
+
+    async function loadRows() {
+      setIsLoading(true)
+      try {
+        const data = await listRecords<FinanceRecord>(config.endpoint)
+        if (!active) return
+        setRows(data)
+      } catch (error) {
+        if (!active) return
+        setRows([])
+        showToast({ type: 'warning', title: 'Could not load records', message: getErrorMessage(error, 'We could not load data from the API.') })
+      } finally {
+        if (active) setIsLoading(false)
+      }
+    }
+
+    void loadRows()
+
+    return () => {
+      active = false
+    }
+  }, [config.endpoint, showToast])
 
   useEffect(() => {
     setStatusFilter('all')
@@ -222,7 +245,7 @@ export function ModulePage({ id }: { id: keyof typeof modules }) {
         </GlassCard>
       )}
       <GlassCard className="p-4">
-        {filteredRows.length ? <><MobileCardList rows={filteredRows} columns={config.columns} renderActions={rowActions} /><DataTable rows={filteredRows} columns={config.columns} renderActions={rowActions} /></> : <EmptyState />}
+        {isLoading ? <LoadingState /> : filteredRows.length ? <><MobileCardList rows={filteredRows} columns={config.columns} renderActions={rowActions} /><DataTable rows={filteredRows} columns={config.columns} renderActions={rowActions} /></> : <EmptyState />}
       </GlassCard>
       <Modal title={`${editing ? 'Edit' : 'Add'} ${config.title}`} open={open} onClose={() => { setOpen(false); setEditing(null); reset({}) }}>
         <form onSubmit={handleSubmit(onSubmit)} className="grid gap-3 md:grid-cols-2">
